@@ -4,16 +4,12 @@ using System.Text.Json;
 
 namespace BrewLog.Api.Data;
 
-public class BrewLogDbContext : DbContext
+public class BrewLogDbContext(DbContextOptions<BrewLogDbContext> options) : DbContext(options)
 {
-    public BrewLogDbContext(DbContextOptions<BrewLogDbContext> options) : base(options)
-    {
-    }
-
-    public DbSet<CoffeeBean> CoffeeBeans { get; set; }
-    public DbSet<GrindSetting> GrindSettings { get; set; }
-    public DbSet<BrewingEquipment> BrewingEquipment { get; set; }
-    public DbSet<BrewSession> BrewSessions { get; set; }
+    public DbSet<CoffeeBean> CoffeeBeans { get; set; } = null!;
+    public DbSet<GrindSetting> GrindSettings { get; set; } = null!;
+    public DbSet<BrewingEquipment> BrewingEquipment { get; set; } = null!;
+    public DbSet<BrewSession> BrewSessions { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -34,7 +30,7 @@ public class BrewLogDbContext : DbContext
         modelBuilder.Entity<BrewSession>()
             .Property(b => b.WaterTemperature)
             .HasPrecision(5, 2);
-            
+
         modelBuilder.Entity<GrindSetting>()
             .Property(g => g.GrindWeight)
             .HasPrecision(6, 2);
