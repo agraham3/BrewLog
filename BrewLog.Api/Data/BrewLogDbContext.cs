@@ -4,12 +4,16 @@ using System.Text.Json;
 
 namespace BrewLog.Api.Data;
 
-public class BrewLogDbContext(DbContextOptions<BrewLogDbContext> options) : DbContext(options)
+public class BrewLogDbContext : DbContext
 {
-    public required DbSet<CoffeeBean> CoffeeBeans { get; set; }
-    public required DbSet<GrindSetting> GrindSettings { get; set; }
-    public required DbSet<BrewingEquipment> BrewingEquipment { get; set; }
-    public required DbSet<BrewSession> BrewSessions { get; set; }
+    public BrewLogDbContext(DbContextOptions<BrewLogDbContext> options) : base(options)
+    {
+    }
+
+    public DbSet<CoffeeBean> CoffeeBeans { get; set; }
+    public DbSet<GrindSetting> GrindSettings { get; set; }
+    public DbSet<BrewingEquipment> BrewingEquipment { get; set; }
+    public DbSet<BrewSession> BrewSessions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
