@@ -34,7 +34,7 @@
   - Write unit tests for repository operations
   - _Requirements: 1.1, 1.3, 2.2, 2.4, 3.3, 4.2, 4.3, 7.4_
 
-- [ ] 5. Create DTOs and AutoMapper configuration
+- [x] 5. Create DTOs and AutoMapper configuration
   - Create DTO classes for all entities (Create, Update, Response DTOs)
   - Set up AutoMapper profiles for entity-to-DTO mapping
   - Create filter DTOs for complex query operations
