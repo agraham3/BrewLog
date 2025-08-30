@@ -42,7 +42,7 @@
   - Write unit tests for mapping configurations
   - _Requirements: 1.1, 2.2, 3.3, 4.2, 5.1_
 
-- [ ] 6. Implement FluentValidation rules
+- [x] 6. Implement FluentValidation rules
   - Create validators for CoffeeBean create/update operations
   - Create validators for GrindSetting with range validation (1-30)
   - Create validators for BrewingEquipment with specification validation
