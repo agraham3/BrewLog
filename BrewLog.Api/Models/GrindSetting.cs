@@ -24,5 +24,5 @@ public class GrindSetting
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     
     // Navigation properties
-    public ICollection<BrewSession> BrewSessions { get; set; } = new List<BrewSession>();
+    public ICollection<BrewSession> BrewSessions { get; set; } = [];
 }

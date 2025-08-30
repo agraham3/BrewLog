@@ -7,7 +7,7 @@
   - Configure Swagger/OpenAPI documentation
   - _Requirements: 7.1, 7.3, 7.4_
 
-- [ ] 2. Implement core domain models and enumerations
+- [x] 2. Implement core domain models and enumerations
   - Create enum types for RoastLevel, BrewMethod, and EquipmentType
   - Implement CoffeeBean entity with validation attributes
   - Implement GrindSetting entity with time and weight properties
