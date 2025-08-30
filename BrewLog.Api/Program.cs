@@ -63,11 +63,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Ensure database is created
+// Apply pending migrations
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<BrewLogDbContext>();
-    context.Database.EnsureCreated();
+    context.Database.Migrate();
 }
 
 app.Run();
