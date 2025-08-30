@@ -23,5 +23,5 @@ public class CoffeeBean
     public DateTime? ModifiedDate { get; set; }
     
     // Navigation properties
-    public ICollection<BrewSession> BrewSessions { get; set; } = new List<BrewSession>();
+    public ICollection<BrewSession> BrewSessions { get; set; } = [];
 }
