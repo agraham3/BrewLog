@@ -1,4 +1,3 @@
-using FluentAssertions;
 using FluentValidation.TestHelper;
 using BrewLog.Api.DTOs;
 using BrewLog.Api.Models;
@@ -44,7 +43,7 @@ public class BrewingEquipmentValidatorTests
             Vendor = "",
             Model = "Barista Express",
             Type = EquipmentType.EspressoMachine,
-            Specifications = new Dictionary<string, string>()
+            Specifications = []
         };
 
         // Act
@@ -64,7 +63,7 @@ public class BrewingEquipmentValidatorTests
             Vendor = new string('V', 101), // 101 characters
             Model = "Barista Express",
             Type = EquipmentType.EspressoMachine,
-            Specifications = new Dictionary<string, string>()
+            Specifications = []
         };
 
         // Act
@@ -84,7 +83,7 @@ public class BrewingEquipmentValidatorTests
             Vendor = "Breville",
             Model = "",
             Type = EquipmentType.EspressoMachine,
-            Specifications = new Dictionary<string, string>()
+            Specifications = []
         };
 
         // Act
@@ -104,7 +103,7 @@ public class BrewingEquipmentValidatorTests
             Vendor = "Breville",
             Model = new string('M', 101), // 101 characters
             Type = EquipmentType.EspressoMachine,
-            Specifications = new Dictionary<string, string>()
+            Specifications = []
         };
 
         // Act
@@ -124,7 +123,7 @@ public class BrewingEquipmentValidatorTests
             Vendor = "Breville",
             Model = "Barista Express",
             Type = (EquipmentType)999, // Invalid enum value
-            Specifications = new Dictionary<string, string>()
+            Specifications = []
         };
 
         // Act
@@ -378,7 +377,7 @@ public class BrewingEquipmentValidatorTests
             Vendor = "Test Vendor",
             Model = "Test Model",
             Type = type,
-            Specifications = new Dictionary<string, string>()
+            Specifications = []
         };
 
         // Act
