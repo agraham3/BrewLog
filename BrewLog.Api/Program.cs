@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using BrewLog.Api.Data;
 using BrewLog.Api.Repositories;
 using BrewLog.Api.Services;
+using BrewLog.Api.Middleware;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
@@ -62,6 +63,9 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
+// Add global exception handling middleware first
+app.UseMiddleware<GlobalExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -88,3 +92,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
+// Make Program class accessible for testing
+public partial class Program { }
