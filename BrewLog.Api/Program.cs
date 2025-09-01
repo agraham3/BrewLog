@@ -34,6 +34,7 @@ builder.Services.AddScoped<ICoffeeBeanService, CoffeeBeanService>();
 builder.Services.AddScoped<IGrindSettingService, GrindSettingService>();
 builder.Services.AddScoped<IBrewingEquipmentService, BrewingEquipmentService>();
 builder.Services.AddScoped<IBrewSessionService, BrewSessionService>();
+builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
 
 // Add Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
