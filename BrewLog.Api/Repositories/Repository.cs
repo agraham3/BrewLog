@@ -4,16 +4,10 @@ using System.Linq.Expressions;
 
 namespace BrewLog.Api.Repositories;
 
-public class Repository<T> : IRepository<T> where T : class
+public class Repository<T>(BrewLogDbContext context) : IRepository<T> where T : class
 {
-    protected readonly BrewLogDbContext _context;
-    protected readonly DbSet<T> _dbSet;
-
-    public Repository(BrewLogDbContext context)
-    {
-        _context = context;
-        _dbSet = context.Set<T>();
-    }
+    protected readonly BrewLogDbContext _context = context;
+    protected readonly DbSet<T> _dbSet = context.Set<T>();
 
     public virtual async Task<T?> GetByIdAsync(int id)
     {

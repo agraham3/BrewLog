@@ -57,7 +57,7 @@ public class CreateBrewingEquipmentDtoValidator : AbstractValidator<CreateBrewin
     private static bool BeValidSpecifications(Dictionary<string, string> specifications)
     {
         if (specifications == null) return false;
-        
+
         return specifications.All(spec =>
             !string.IsNullOrWhiteSpace(spec.Key) &&
             !string.IsNullOrWhiteSpace(spec.Value) &&
@@ -68,7 +68,7 @@ public class CreateBrewingEquipmentDtoValidator : AbstractValidator<CreateBrewin
     private static bool ContainValidPressureSpec(Dictionary<string, string> specifications)
     {
         if (specifications == null) return true;
-        
+
         if (!specifications.ContainsKey("Pressure"))
             return true; // Optional, but if present should be valid
 
@@ -79,7 +79,7 @@ public class CreateBrewingEquipmentDtoValidator : AbstractValidator<CreateBrewin
     private static bool ContainValidBurrTypeSpec(Dictionary<string, string> specifications)
     {
         if (specifications == null) return true;
-        
+
         if (!specifications.ContainsKey("BurrType"))
             return true; // Optional, but if present should be valid
 
@@ -143,7 +143,7 @@ public class UpdateBrewingEquipmentDtoValidator : AbstractValidator<UpdateBrewin
     private static bool BeValidSpecifications(Dictionary<string, string> specifications)
     {
         if (specifications == null) return false;
-        
+
         return specifications.All(spec =>
             !string.IsNullOrWhiteSpace(spec.Key) &&
             !string.IsNullOrWhiteSpace(spec.Value) &&
@@ -154,7 +154,7 @@ public class UpdateBrewingEquipmentDtoValidator : AbstractValidator<UpdateBrewin
     private static bool ContainValidPressureSpec(Dictionary<string, string> specifications)
     {
         if (specifications == null) return true;
-        
+
         if (!specifications.ContainsKey("Pressure"))
             return true; // Optional, but if present should be valid
 
@@ -165,7 +165,7 @@ public class UpdateBrewingEquipmentDtoValidator : AbstractValidator<UpdateBrewin
     private static bool ContainValidBurrTypeSpec(Dictionary<string, string> specifications)
     {
         if (specifications == null) return true;
-        
+
         if (!specifications.ContainsKey("BurrType"))
             return true; // Optional, but if present should be valid
 

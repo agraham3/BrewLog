@@ -12,12 +12,12 @@ public class BrewSessionResponseDto
     public int? Rating { get; set; }
     public bool IsFavorite { get; set; }
     public DateTime CreatedDate { get; set; }
-    
+
     // Foreign Keys
     public int CoffeeBeanId { get; set; }
     public int GrindSettingId { get; set; }
     public int? BrewingEquipmentId { get; set; }
-    
+
     // Related entities
     public CoffeeBeanResponseDto CoffeeBean { get; set; } = null!;
     public GrindSettingResponseDto GrindSetting { get; set; } = null!;
@@ -32,7 +32,7 @@ public class CreateBrewSessionDto
     public string TastingNotes { get; set; } = string.Empty;
     public int? Rating { get; set; }
     public bool IsFavorite { get; set; }
-    
+
     // Foreign Keys
     public int CoffeeBeanId { get; set; }
     public int GrindSettingId { get; set; }
@@ -47,7 +47,7 @@ public class UpdateBrewSessionDto
     public string TastingNotes { get; set; } = string.Empty;
     public int? Rating { get; set; }
     public bool IsFavorite { get; set; }
-    
+
     // Foreign Keys
     public int CoffeeBeanId { get; set; }
     public int GrindSettingId { get; set; }

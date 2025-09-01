@@ -50,7 +50,7 @@
   - Write unit tests for all validation rules
   - _Requirements: 1.2, 2.1, 3.1, 4.1, 7.1_
 
-- [ ] 7. Implement business service layer
+- [x] 7. Implement business service layer
   - Create ICoffeeBeanService interface and implementation
   - Create IGrindSettingService interface and implementation
   - Create IBrewingEquipmentService interface and implementation

@@ -79,7 +79,7 @@ public class AnalyticsMappingProfile : Profile
     {
         CreateMap<BrewSession, RecentBrewSessionDto>()
             .ForMember(dest => dest.CoffeeBeanName, opt => opt.MapFrom(src => src.CoffeeBean.Name));
-        
+
         CreateMap<BrewingEquipment, EquipmentPerformanceItemDto>()
             .ForMember(dest => dest.EquipmentId, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.TotalUses, opt => opt.Ignore())

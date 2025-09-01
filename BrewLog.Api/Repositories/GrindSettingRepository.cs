@@ -4,16 +4,12 @@ using BrewLog.Api.Models;
 
 namespace BrewLog.Api.Repositories;
 
-public class GrindSettingRepository : Repository<GrindSetting>, IGrindSettingRepository
+public class GrindSettingRepository(BrewLogDbContext context) : Repository<GrindSetting>(context), IGrindSettingRepository
 {
-    public GrindSettingRepository(BrewLogDbContext context) : base(context)
-    {
-    }
-
     public async Task<IEnumerable<GrindSetting>> GetByGrinderTypeAsync(string grinderType)
     {
         return await _dbSet
-            .Where(gs => gs.GrinderType.ToLower().Contains(grinderType.ToLower()))
+            .Where(gs => gs.GrinderType.Contains(grinderType, StringComparison.OrdinalIgnoreCase))
             .OrderBy(gs => gs.GrindSize)
             .ToListAsync();
     }
@@ -37,7 +33,7 @@ public class GrindSettingRepository : Repository<GrindSetting>, IGrindSettingRep
     public async Task<IEnumerable<GrindSetting>> SearchByNotesAsync(string searchTerm)
     {
         return await _dbSet
-            .Where(gs => gs.Notes.ToLower().Contains(searchTerm.ToLower()))
+            .Where(gs => gs.Notes.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
             .OrderBy(gs => gs.GrindSize)
             .ToListAsync();
     }
@@ -48,7 +44,7 @@ public class GrindSettingRepository : Repository<GrindSetting>, IGrindSettingRep
 
         if (!string.IsNullOrWhiteSpace(grinderType))
         {
-            query = query.Where(gs => gs.GrinderType.ToLower().Contains(grinderType.ToLower()));
+            query = query.Where(gs => gs.GrinderType.Contains(grinderType, StringComparison.OrdinalIgnoreCase));
         }
 
         if (minGrindSize.HasValue)

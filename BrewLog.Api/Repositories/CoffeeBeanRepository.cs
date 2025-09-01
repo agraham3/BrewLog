@@ -4,16 +4,12 @@ using BrewLog.Api.Models;
 
 namespace BrewLog.Api.Repositories;
 
-public class CoffeeBeanRepository : Repository<CoffeeBean>, ICoffeeBeanRepository
+public class CoffeeBeanRepository(BrewLogDbContext context) : Repository<CoffeeBean>(context), ICoffeeBeanRepository
 {
-    public CoffeeBeanRepository(BrewLogDbContext context) : base(context)
-    {
-    }
-
     public async Task<IEnumerable<CoffeeBean>> GetByBrandAsync(string brand)
     {
         return await _dbSet
-            .Where(cb => cb.Brand.ToLower().Contains(brand.ToLower()))
+            .Where(cb => cb.Brand.Contains(brand, StringComparison.OrdinalIgnoreCase))
             .OrderBy(cb => cb.Name)
             .ToListAsync();
     }
@@ -29,7 +25,7 @@ public class CoffeeBeanRepository : Repository<CoffeeBean>, ICoffeeBeanRepositor
     public async Task<IEnumerable<CoffeeBean>> GetByOriginAsync(string origin)
     {
         return await _dbSet
-            .Where(cb => cb.Origin.ToLower().Contains(origin.ToLower()))
+            .Where(cb => cb.Origin.Contains(origin, StringComparison.OrdinalIgnoreCase))
             .OrderBy(cb => cb.Name)
             .ToListAsync();
     }
@@ -37,7 +33,7 @@ public class CoffeeBeanRepository : Repository<CoffeeBean>, ICoffeeBeanRepositor
     public async Task<IEnumerable<CoffeeBean>> SearchByNameAsync(string name)
     {
         return await _dbSet
-            .Where(cb => cb.Name.ToLower().Contains(name.ToLower()))
+            .Where(cb => cb.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
             .OrderBy(cb => cb.Name)
             .ToListAsync();
     }
@@ -48,7 +44,7 @@ public class CoffeeBeanRepository : Repository<CoffeeBean>, ICoffeeBeanRepositor
 
         if (!string.IsNullOrWhiteSpace(brand))
         {
-            query = query.Where(cb => cb.Brand.ToLower().Contains(brand.ToLower()));
+            query = query.Where(cb => cb.Brand.Contains(brand, StringComparison.OrdinalIgnoreCase));
         }
 
         if (roastLevel.HasValue)
@@ -58,12 +54,12 @@ public class CoffeeBeanRepository : Repository<CoffeeBean>, ICoffeeBeanRepositor
 
         if (!string.IsNullOrWhiteSpace(origin))
         {
-            query = query.Where(cb => cb.Origin.ToLower().Contains(origin.ToLower()));
+            query = query.Where(cb => cb.Origin.Contains(origin, StringComparison.OrdinalIgnoreCase));
         }
 
         if (!string.IsNullOrWhiteSpace(nameSearch))
         {
-            query = query.Where(cb => cb.Name.ToLower().Contains(nameSearch.ToLower()));
+            query = query.Where(cb => cb.Name.Contains(nameSearch, StringComparison.OrdinalIgnoreCase));
         }
 
         return await query

@@ -4,12 +4,8 @@ using BrewLog.Api.Models;
 
 namespace BrewLog.Api.Repositories;
 
-public class BrewSessionRepository : Repository<BrewSession>, IBrewSessionRepository
+public class BrewSessionRepository(BrewLogDbContext context) : Repository<BrewSession>(context), IBrewSessionRepository
 {
-    public BrewSessionRepository(BrewLogDbContext context) : base(context)
-    {
-    }
-
     public async Task<IEnumerable<BrewSession>> GetByBrewMethodAsync(BrewMethod method)
     {
         return await _dbSet
@@ -118,7 +114,7 @@ public class BrewSessionRepository : Repository<BrewSession>, IBrewSessionReposi
             .Include(bs => bs.CoffeeBean)
             .Include(bs => bs.GrindSetting)
             .Include(bs => bs.BrewingEquipment)
-            .Where(bs => bs.TastingNotes.ToLower().Contains(searchTerm.ToLower()))
+            .Where(bs => bs.TastingNotes.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
             .OrderByDescending(bs => bs.CreatedDate)
             .ToListAsync();
     }
@@ -188,7 +184,7 @@ public class BrewSessionRepository : Repository<BrewSession>, IBrewSessionReposi
 
         if (!string.IsNullOrWhiteSpace(tastingNotesSearch))
         {
-            query = query.Where(bs => bs.TastingNotes.ToLower().Contains(tastingNotesSearch.ToLower()));
+            query = query.Where(bs => bs.TastingNotes.Contains(tastingNotesSearch, StringComparison.OrdinalIgnoreCase));
         }
 
         return await query

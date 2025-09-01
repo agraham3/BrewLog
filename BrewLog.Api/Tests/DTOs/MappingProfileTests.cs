@@ -20,7 +20,7 @@ public class MappingProfileTests
             cfg.AddProfile<BrewSessionMappingProfile>();
             cfg.AddProfile<AnalyticsMappingProfile>();
         });
-        
+
         configuration.AssertConfigurationIsValid();
         _mapper = configuration.CreateMapper();
     }

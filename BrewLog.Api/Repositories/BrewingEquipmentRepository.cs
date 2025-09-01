@@ -4,11 +4,8 @@ using BrewLog.Api.Models;
 
 namespace BrewLog.Api.Repositories;
 
-public class BrewingEquipmentRepository : Repository<BrewingEquipment>, IBrewingEquipmentRepository
+public class BrewingEquipmentRepository(BrewLogDbContext context) : Repository<BrewingEquipment>(context), IBrewingEquipmentRepository
 {
-    public BrewingEquipmentRepository(BrewLogDbContext context) : base(context)
-    {
-    }
 
     public async Task<IEnumerable<BrewingEquipment>> GetByTypeAsync(EquipmentType type)
     {
@@ -22,7 +19,7 @@ public class BrewingEquipmentRepository : Repository<BrewingEquipment>, IBrewing
     public async Task<IEnumerable<BrewingEquipment>> GetByVendorAsync(string vendor)
     {
         return await _dbSet
-            .Where(be => be.Vendor.ToLower().Contains(vendor.ToLower()))
+            .Where(be => be.Vendor.Contains(vendor, StringComparison.OrdinalIgnoreCase))
             .OrderBy(be => be.Vendor)
             .ThenBy(be => be.Model)
             .ToListAsync();
@@ -31,7 +28,7 @@ public class BrewingEquipmentRepository : Repository<BrewingEquipment>, IBrewing
     public async Task<IEnumerable<BrewingEquipment>> GetByModelAsync(string model)
     {
         return await _dbSet
-            .Where(be => be.Model.ToLower().Contains(model.ToLower()))
+            .Where(be => be.Model.Contains(model, StringComparison.OrdinalIgnoreCase))
             .OrderBy(be => be.Vendor)
             .ThenBy(be => be.Model)
             .ToListAsync();
@@ -39,10 +36,9 @@ public class BrewingEquipmentRepository : Repository<BrewingEquipment>, IBrewing
 
     public async Task<IEnumerable<BrewingEquipment>> SearchByVendorOrModelAsync(string searchTerm)
     {
-        var lowerSearchTerm = searchTerm.ToLower();
         return await _dbSet
-            .Where(be => be.Vendor.ToLower().Contains(lowerSearchTerm) || 
-                        be.Model.ToLower().Contains(lowerSearchTerm))
+            .Where(be => be.Vendor.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                        be.Model.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
             .OrderBy(be => be.Vendor)
             .ThenBy(be => be.Model)
             .ToListAsync();
@@ -59,19 +55,18 @@ public class BrewingEquipmentRepository : Repository<BrewingEquipment>, IBrewing
 
         if (!string.IsNullOrWhiteSpace(vendor))
         {
-            query = query.Where(be => be.Vendor.ToLower().Contains(vendor.ToLower()));
+            query = query.Where(be => be.Vendor.Contains(vendor, StringComparison.OrdinalIgnoreCase));
         }
 
         if (!string.IsNullOrWhiteSpace(model))
         {
-            query = query.Where(be => be.Model.ToLower().Contains(model.ToLower()));
+            query = query.Where(be => be.Model.Contains(model, StringComparison.OrdinalIgnoreCase));
         }
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
-            var lowerSearchTerm = searchTerm.ToLower();
-            query = query.Where(be => be.Vendor.ToLower().Contains(lowerSearchTerm) || 
-                                     be.Model.ToLower().Contains(lowerSearchTerm));
+            query = query.Where(be => be.Vendor.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                                     be.Model.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
         }
 
         return await query
@@ -112,10 +107,9 @@ public class BrewingEquipmentRepository : Repository<BrewingEquipment>, IBrewing
         // Since JSON queries are complex to translate, we'll use client evaluation
         var allEquipment = await _dbSet.ToListAsync();
         return allEquipment
-            .Where(be => be.Specifications.ContainsKey(key) && 
-                        be.Specifications[key].ToLower().Contains(value.ToLower()))
+            .Where(be => be.Specifications.ContainsKey(key) &&
+                        be.Specifications[key].Contains(value, StringComparison.OrdinalIgnoreCase))
             .OrderBy(be => be.Vendor)
-            .ThenBy(be => be.Model)
-            .ToList();
+            .ThenBy(be => be.Model);
     }
 }

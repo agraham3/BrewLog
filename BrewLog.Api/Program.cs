@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using BrewLog.Api.Data;
+using BrewLog.Api.Repositories;
+using BrewLog.Api.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
@@ -10,7 +12,7 @@ builder.Services.AddControllers();
 
 // Configure Entity Framework with SQLite
 builder.Services.AddDbContext<BrewLogDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? 
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ??
                      "Data Source=brewlog.db"));
 
 // Add AutoMapper
@@ -20,12 +22,26 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
+// Register Repositories
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<ICoffeeBeanRepository, CoffeeBeanRepository>();
+builder.Services.AddScoped<IGrindSettingRepository, GrindSettingRepository>();
+builder.Services.AddScoped<IBrewingEquipmentRepository, BrewingEquipmentRepository>();
+builder.Services.AddScoped<IBrewSessionRepository, BrewSessionRepository>();
+
+// Register Services
+builder.Services.AddScoped<ICoffeeBeanService, CoffeeBeanService>();
+builder.Services.AddScoped<IGrindSettingService, GrindSettingService>();
+builder.Services.AddScoped<IBrewingEquipmentService, BrewingEquipmentService>();
+builder.Services.AddScoped<IBrewSessionService, BrewSessionService>();
+
 // Add Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new() { 
-        Title = "BrewLog API", 
+    c.SwaggerDoc("v1", new()
+    {
+        Title = "BrewLog API",
         Version = "v1",
         Description = "A comprehensive coffee brewing tracking API"
     });
