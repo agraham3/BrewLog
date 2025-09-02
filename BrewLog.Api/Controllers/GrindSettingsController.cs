@@ -21,11 +21,11 @@ public class GrindSettingsController : ControllerBase
     /// <summary>
     /// Get all grind settings with optional filtering
     /// </summary>
-    /// <param name="minGrindSize">Filter by minimum grind size on a 1-30 scale where 1=finest (espresso) and 30=coarsest (cold brew). Settings with grind size >= this value will be returned.</param>
-    /// <param name="maxGrindSize">Filter by maximum grind size on a 1-30 scale where 1=finest (espresso) and 30=coarsest (cold brew). Settings with grind size <= this value will be returned.</param>
+    /// <param name="minGrindSize">Filter by minimum grind size on a 1-30 scale where 1=finest (espresso) and 30=coarsest (cold brew). Settings with grind size &gt;= this value will be returned.</param>
+    /// <param name="maxGrindSize">Filter by maximum grind size on a 1-30 scale where 1=finest (espresso) and 30=coarsest (cold brew). Settings with grind size &lt;= this value will be returned.</param>
     /// <param name="grinderType">Filter by grinder type using partial case-insensitive matching. Example: "burr" will match "Burr Grinder" and "Conical Burr"</param>
-    /// <param name="minGrindWeight">Filter by minimum grind weight in grams. Settings with weight >= this value will be returned. Typical range: 10-50 grams.</param>
-    /// <param name="maxGrindWeight">Filter by maximum grind weight in grams. Settings with weight <= this value will be returned. Typical range: 10-50 grams.</param>
+    /// <param name="minGrindWeight">Filter by minimum grind weight in grams. Settings with weight &gt;= this value will be returned. Typical range: 10-50 grams.</param>
+    /// <param name="maxGrindWeight">Filter by maximum grind weight in grams. Settings with weight &lt;= this value will be returned. Typical range: 10-50 grams.</param>
     /// <param name="createdAfter">Filter by creation date (inclusive). Only settings created on or after this date will be returned. Format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS</param>
     /// <param name="createdBefore">Filter by creation date (inclusive). Only settings created on or before this date will be returned. Format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS</param>
     /// <returns>List of grind settings matching the specified filters, ordered by creation date descending</returns>

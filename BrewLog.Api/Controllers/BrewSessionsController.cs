@@ -26,10 +26,10 @@ public class BrewSessionsController : ControllerBase
     /// <param name="coffeeBeanId">Filter by coffee bean ID. Must be a valid existing coffee bean identifier.</param>
     /// <param name="grindSettingId">Filter by grind setting ID. Must be a valid existing grind setting identifier.</param>
     /// <param name="brewingEquipmentId">Filter by brewing equipment ID. Must be a valid existing brewing equipment identifier.</param>
-    /// <param name="minWaterTemperature">Filter by minimum water temperature in Celsius. Valid range: 60.0 - 100.0. Sessions with temperature >= this value will be returned.</param>
-    /// <param name="maxWaterTemperature">Filter by maximum water temperature in Celsius. Valid range: 60.0 - 100.0. Sessions with temperature <= this value will be returned.</param>
-    /// <param name="minRating">Filter by minimum rating. Valid range: 1 - 10. Sessions with rating >= this value will be returned.</param>
-    /// <param name="maxRating">Filter by maximum rating. Valid range: 1 - 10. Sessions with rating <= this value will be returned.</param>
+    /// <param name="minWaterTemperature">Filter by minimum water temperature in Celsius. Valid range: 60.0 - 100.0. Sessions with temperature &gt;= this value will be returned.</param>
+    /// <param name="maxWaterTemperature">Filter by maximum water temperature in Celsius. Valid range: 60.0 - 100.0. Sessions with temperature &lt;= this value will be returned.</param>
+    /// <param name="minRating">Filter by minimum rating. Valid range: 1 - 10. Sessions with rating &gt;= this value will be returned.</param>
+    /// <param name="maxRating">Filter by maximum rating. Valid range: 1 - 10. Sessions with rating &lt;= this value will be returned.</param>
     /// <param name="isFavorite">Filter by favorite status. true=only favorite sessions, false=only non-favorite sessions, null=all sessions.</param>
     /// <param name="createdAfter">Filter by creation date (inclusive). Only sessions created on or after this date will be returned. Format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS</param>
     /// <param name="createdBefore">Filter by creation date (inclusive). Only sessions created on or before this date will be returned. Format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS</param>
@@ -50,7 +50,7 @@ public class BrewSessionsController : ControllerBase
         [FromQuery] DateTime? createdAfter = null,
         [FromQuery] DateTime? createdBefore = null)
     {
-        _logger.LogInformation("Getting brew sessions with filters: Method={Method}, Bean={Bean}, Rating={MinRating}-{MaxRating}, Favorite={Favorite}", 
+        _logger.LogInformation("Getting brew sessions with filters: Method={Method}, Bean={Bean}, Rating={MinRating}-{MaxRating}, Favorite={Favorite}",
             method, coffeeBeanId, minRating, maxRating, isFavorite);
 
         var filter = new BrewSessionFilterDto
@@ -86,7 +86,7 @@ public class BrewSessionsController : ControllerBase
         _logger.LogInformation("Getting brew session with ID: {Id}", id);
 
         var brewSession = await _brewSessionService.GetByIdAsync(id);
-        
+
         if (brewSession == null)
         {
             _logger.LogWarning("Brew session with ID {Id} not found", id);
@@ -107,7 +107,7 @@ public class BrewSessionsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<BrewSessionResponseDto>> CreateBrewSession([FromBody] CreateBrewSessionDto createDto)
     {
-        _logger.LogInformation("Creating new brew session: Method={Method}, Bean={BeanId}, Rating={Rating}", 
+        _logger.LogInformation("Creating new brew session: Method={Method}, Bean={BeanId}, Rating={Rating}",
             createDto.Method, createDto.CoffeeBeanId, createDto.Rating);
 
         if (!ModelState.IsValid)
@@ -118,12 +118,12 @@ public class BrewSessionsController : ControllerBase
         try
         {
             var createdSession = await _brewSessionService.CreateAsync(createDto);
-            
+
             _logger.LogInformation("Successfully created brew session with ID: {Id}", createdSession.Id);
-            
+
             return CreatedAtAction(
-                nameof(GetBrewSession), 
-                new { id = createdSession.Id }, 
+                nameof(GetBrewSession),
+                new { id = createdSession.Id },
                 createdSession);
         }
         catch (BusinessValidationException ex)
@@ -213,7 +213,7 @@ public class BrewSessionsController : ControllerBase
         try
         {
             var updatedSession = await _brewSessionService.ToggleFavoriteAsync(id);
-            _logger.LogInformation("Successfully toggled favorite status for brew session with ID: {Id}. New status: {IsFavorite}", 
+            _logger.LogInformation("Successfully toggled favorite status for brew session with ID: {Id}. New status: {IsFavorite}",
                 id, updatedSession.IsFavorite);
             return Ok(updatedSession);
         }
