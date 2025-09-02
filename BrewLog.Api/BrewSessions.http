@@ -1,0 +1,140 @@
+### Test BrewSessions API Endpoints
+
+### Get all brew sessions
+GET {{BrewLog.Api_HostAddress}}/api/brewsessions
+
+### Get brew sessions with filters
+GET {{BrewLog.Api_HostAddress}}/api/brewsessions?method=0&minRating=7&isFavorite=true
+
+### Get brew sessions filtered by date range
+GET {{BrewLog.Api_HostAddress}}/api/brewsessions?createdAfter=2024-01-01T00:00:00Z&createdBefore=2024-12-31T23:59:59Z
+
+### Get brew sessions filtered by coffee bean
+GET {{BrewLog.Api_HostAddress}}/api/brewsessions?coffeeBeanId=1
+
+### Get brew sessions filtered by temperature range
+GET {{BrewLog.Api_HostAddress}}/api/brewsessions?minWaterTemperature=90&maxWaterTemperature=95
+
+### Get brew sessions filtered by rating range
+GET {{BrewLog.Api_HostAddress}}/api/brewsessions?minRating=8&maxRating=10
+
+### Get brew session by ID
+GET {{BrewLog.Api_HostAddress}}/api/brewsessions/1
+
+### Create new brew session (Espresso)
+POST {{BrewLog.Api_HostAddress}}/api/brewsessions
+Content-Type: application/json
+
+{
+  "method": 0,
+  "waterTemperature": 93.5,
+  "brewTime": "00:00:25",
+  "tastingNotes": "Rich crema, balanced flavor with chocolate notes",
+  "rating": 8,
+  "isFavorite": false,
+  "coffeeBeanId": 1,
+  "grindSettingId": 1,
+  "brewingEquipmentId": 1
+}
+
+### Create new brew session (Pour Over)
+POST {{BrewLog.Api_HostAddress}}/api/brewsessions
+Content-Type: application/json
+
+{
+  "method": 2,
+  "waterTemperature": 94.0,
+  "brewTime": "00:03:30",
+  "tastingNotes": "Clean cup with bright acidity and floral notes",
+  "rating": 9,
+  "isFavorite": true,
+  "coffeeBeanId": 2,
+  "grindSettingId": 2,
+  "brewingEquipmentId": 2
+}
+
+### Create new brew session (French Press)
+POST {{BrewLog.Api_HostAddress}}/api/brewsessions
+Content-Type: application/json
+
+{
+  "method": 1,
+  "waterTemperature": 95.0,
+  "brewTime": "00:04:00",
+  "tastingNotes": "Full body with earthy undertones",
+  "rating": 7,
+  "isFavorite": false,
+  "coffeeBeanId": 1,
+  "grindSettingId": 3
+}
+
+### Create new brew session (Cold Brew)
+POST {{BrewLog.Api_HostAddress}}/api/brewsessions
+Content-Type: application/json
+
+{
+  "method": 5,
+  "waterTemperature": 20.0,
+  "brewTime": "12:00:00",
+  "tastingNotes": "Smooth, low acidity, sweet finish",
+  "rating": 8,
+  "isFavorite": true,
+  "coffeeBeanId": 3,
+  "grindSettingId": 4
+}
+
+### Update brew session
+PUT {{BrewLog.Api_HostAddress}}/api/brewsessions/1
+Content-Type: application/json
+
+{
+  "method": 0,
+  "waterTemperature": 94.0,
+  "brewTime": "00:00:28",
+  "tastingNotes": "Updated: Excellent crema, perfect extraction with dark chocolate notes",
+  "rating": 9,
+  "isFavorite": true,
+  "coffeeBeanId": 1,
+  "grindSettingId": 1,
+  "brewingEquipmentId": 1
+}
+
+### Delete brew session
+DELETE {{BrewLog.Api_HostAddress}}/api/brewsessions/1
+
+### Toggle favorite status
+POST {{BrewLog.Api_HostAddress}}/api/brewsessions/1/favorite
+
+### Get favorite brew sessions
+GET {{BrewLog.Api_HostAddress}}/api/brewsessions/favorites
+
+### Get recent brew sessions
+GET {{BrewLog.Api_HostAddress}}/api/brewsessions/recent?count=5
+
+### Get top rated brew sessions
+GET {{BrewLog.Api_HostAddress}}/api/brewsessions/top-rated?count=10
+
+### Advanced filtering examples
+
+### Get espresso sessions with high ratings
+GET {{BrewLog.Api_HostAddress}}/api/brewsessions?method=0&minRating=8
+
+### Get pour over sessions from last month
+GET {{BrewLog.Api_HostAddress}}/api/brewsessions?method=2&createdAfter=2024-01-01T00:00:00Z
+
+### Get sessions with specific equipment
+GET {{BrewLog.Api_HostAddress}}/api/brewsessions?brewingEquipmentId=1
+
+### Get sessions with specific grind setting
+GET {{BrewLog.Api_HostAddress}}/api/brewsessions?grindSettingId=2
+
+### Get only favorite sessions with high ratings
+GET {{BrewLog.Api_HostAddress}}/api/brewsessions?isFavorite=true&minRating=9
+
+### Brew Method Reference:
+# 0 = Espresso
+# 1 = FrenchPress  
+# 2 = PourOver
+# 3 = Drip
+# 4 = AeroPress
+# 5 = ColdBrew

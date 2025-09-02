@@ -108,7 +108,7 @@
   - Write integration tests for BrewingEquipmentController
   - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-- [ ] 13. Create BrewSessionsController with advanced filtering and favorites
+- [x] 13. Create BrewSessionsController with advanced filtering and favorites
   - Implement GET /api/brewsessions with filtering by date, bean, method, rating
   - Implement GET /api/brewsessions/{id} for single session retrieval
   - Implement POST /api/brewsessions for creating new sessions
