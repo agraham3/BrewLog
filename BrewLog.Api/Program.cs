@@ -1,8 +1,12 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using BrewLog.Api.Data;
 using BrewLog.Api.Repositories;
 using BrewLog.Api.Services;
 using BrewLog.Api.Middleware;
+using BrewLog.Api.Converters;
+using BrewLog.Api.Models;
+using BrewLog.Api.Filters;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
@@ -10,7 +14,23 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Configure custom enum converters for string serialization
+        options.JsonSerializerOptions.Converters.Add(new StringEnumConverter<RoastLevel>());
+        options.JsonSerializerOptions.Converters.Add(new StringEnumConverter<BrewMethod>());
+        options.JsonSerializerOptions.Converters.Add(new StringEnumConverter<EquipmentType>());
+        
+        // Configure property naming policy (camelCase)
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        
+        // Allow trailing commas in JSON
+        options.JsonSerializerOptions.AllowTrailingCommas = true;
+        
+        // Handle null values appropriately
+        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    });
 
 // Configure Entity Framework with SQLite
 builder.Services.AddDbContext<BrewLogDbContext>(options =>
@@ -68,6 +88,9 @@ builder.Services.AddSwaggerGen(c =>
     }
 
     // Configure enum serialization to show string values
+    c.SchemaFilter<EnumSchemaFilter>();
+    c.ParameterFilter<EnumParameterFilter>();
+    
     c.UseAllOfToExtendReferenceSchemas();
     c.SupportNonNullableReferenceTypes();
 });
