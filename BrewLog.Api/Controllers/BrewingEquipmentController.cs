@@ -22,12 +22,12 @@ public class BrewingEquipmentController : ControllerBase
     /// <summary>
     /// Get all brewing equipment with optional filtering by type and vendor
     /// </summary>
-    /// <param name="type">Filter by equipment type</param>
-    /// <param name="vendor">Filter by vendor (partial match)</param>
-    /// <param name="model">Filter by model (partial match)</param>
-    /// <param name="createdAfter">Filter by creation date (after)</param>
-    /// <param name="createdBefore">Filter by creation date (before)</param>
-    /// <returns>List of brewing equipment</returns>
+    /// <param name="type">Filter by equipment type using integer values: 0=EspressoMachine, 1=Grinder, 2=FrenchPress, 3=PourOverSetup, 4=DripMachine, 5=AeroPress. String values also accepted: "EspressoMachine", "Grinder", etc.</param>
+    /// <param name="vendor">Filter by vendor name using partial case-insensitive matching. Example: "breville" will match "Breville" and "Breville USA"</param>
+    /// <param name="model">Filter by model name using partial case-insensitive matching. Example: "barista" will match "Barista Express" and "Barista Pro"</param>
+    /// <param name="createdAfter">Filter by creation date (inclusive). Only equipment created on or after this date will be returned. Format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS</param>
+    /// <param name="createdBefore">Filter by creation date (inclusive). Only equipment created on or before this date will be returned. Format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS</param>
+    /// <returns>List of brewing equipment matching the specified filters, ordered by creation date descending</returns>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<BrewingEquipmentResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -57,8 +57,8 @@ public class BrewingEquipmentController : ControllerBase
     /// <summary>
     /// Get a specific brewing equipment by ID
     /// </summary>
-    /// <param name="id">Brewing equipment ID</param>
-    /// <returns>Brewing equipment details</returns>
+    /// <param name="id">The unique identifier of the brewing equipment to retrieve. Must be a positive integer.</param>
+    /// <returns>Brewing equipment details including specifications, usage statistics, and all properties</returns>
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(BrewingEquipmentResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -173,10 +173,10 @@ public class BrewingEquipmentController : ControllerBase
     }
 
     /// <summary>
-    /// Get most used brewing equipment
+    /// Get most used brewing equipment ordered by usage frequency (most used first)
     /// </summary>
-    /// <param name="count">Number of most used equipment to return (default: 10)</param>
-    /// <returns>List of most used brewing equipment</returns>
+    /// <param name="count">Number of most used equipment to return. Must be between 1 and 100. Default: 10</param>
+    /// <returns>List of most used brewing equipment ordered by usage frequency descending</returns>
     [HttpGet("most-used")]
     [ProducesResponseType(typeof(IEnumerable<BrewingEquipmentResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

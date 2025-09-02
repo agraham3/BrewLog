@@ -22,18 +22,18 @@ public class BrewSessionsController : ControllerBase
     /// <summary>
     /// Get all brew sessions with advanced filtering options
     /// </summary>
-    /// <param name="method">Filter by brew method</param>
-    /// <param name="coffeeBeanId">Filter by coffee bean ID</param>
-    /// <param name="grindSettingId">Filter by grind setting ID</param>
-    /// <param name="brewingEquipmentId">Filter by brewing equipment ID</param>
-    /// <param name="minWaterTemperature">Filter by minimum water temperature</param>
-    /// <param name="maxWaterTemperature">Filter by maximum water temperature</param>
-    /// <param name="minRating">Filter by minimum rating</param>
-    /// <param name="maxRating">Filter by maximum rating</param>
-    /// <param name="isFavorite">Filter by favorite status</param>
-    /// <param name="createdAfter">Filter by creation date (after)</param>
-    /// <param name="createdBefore">Filter by creation date (before)</param>
-    /// <returns>List of brew sessions</returns>
+    /// <param name="method">Filter by brew method using integer values: 0=Espresso, 1=FrenchPress, 2=PourOver, 3=Drip, 4=AeroPress, 5=ColdBrew. String values also accepted: "Espresso", "FrenchPress", etc.</param>
+    /// <param name="coffeeBeanId">Filter by coffee bean ID. Must be a valid existing coffee bean identifier.</param>
+    /// <param name="grindSettingId">Filter by grind setting ID. Must be a valid existing grind setting identifier.</param>
+    /// <param name="brewingEquipmentId">Filter by brewing equipment ID. Must be a valid existing brewing equipment identifier.</param>
+    /// <param name="minWaterTemperature">Filter by minimum water temperature in Celsius. Valid range: 60.0 - 100.0. Sessions with temperature >= this value will be returned.</param>
+    /// <param name="maxWaterTemperature">Filter by maximum water temperature in Celsius. Valid range: 60.0 - 100.0. Sessions with temperature <= this value will be returned.</param>
+    /// <param name="minRating">Filter by minimum rating. Valid range: 1 - 10. Sessions with rating >= this value will be returned.</param>
+    /// <param name="maxRating">Filter by maximum rating. Valid range: 1 - 10. Sessions with rating <= this value will be returned.</param>
+    /// <param name="isFavorite">Filter by favorite status. true=only favorite sessions, false=only non-favorite sessions, null=all sessions.</param>
+    /// <param name="createdAfter">Filter by creation date (inclusive). Only sessions created on or after this date will be returned. Format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS</param>
+    /// <param name="createdBefore">Filter by creation date (inclusive). Only sessions created on or before this date will be returned. Format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS</param>
+    /// <returns>List of brew sessions matching the specified filters, ordered by creation date descending</returns>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<BrewSessionResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -75,8 +75,8 @@ public class BrewSessionsController : ControllerBase
     /// <summary>
     /// Get a specific brew session by ID
     /// </summary>
-    /// <param name="id">Brew session ID</param>
-    /// <returns>Brew session details</returns>
+    /// <param name="id">The unique identifier of the brew session to retrieve. Must be a positive integer.</param>
+    /// <returns>Brew session details including all properties, relationships, and associated data</returns>
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(BrewSessionResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -200,8 +200,8 @@ public class BrewSessionsController : ControllerBase
     /// <summary>
     /// Toggle the favorite status of a brew session
     /// </summary>
-    /// <param name="id">Brew session ID</param>
-    /// <returns>Updated brew session with new favorite status</returns>
+    /// <param name="id">The unique identifier of the brew session to toggle favorite status. Must be a positive integer.</param>
+    /// <returns>Updated brew session with new favorite status (true if now favorite, false if no longer favorite)</returns>
     [HttpPost("{id:int}/favorite")]
     [ProducesResponseType(typeof(BrewSessionResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -240,10 +240,10 @@ public class BrewSessionsController : ControllerBase
     }
 
     /// <summary>
-    /// Get recent brew sessions
+    /// Get recent brew sessions ordered by creation date (newest first)
     /// </summary>
-    /// <param name="count">Number of recent sessions to return (default: 10)</param>
-    /// <returns>List of recent brew sessions</returns>
+    /// <param name="count">Number of recent sessions to return. Must be between 1 and 100. Default: 10</param>
+    /// <returns>List of recent brew sessions ordered by creation date descending</returns>
     [HttpGet("recent")]
     [ProducesResponseType(typeof(IEnumerable<BrewSessionResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -262,10 +262,10 @@ public class BrewSessionsController : ControllerBase
     }
 
     /// <summary>
-    /// Get top rated brew sessions
+    /// Get top rated brew sessions ordered by rating (highest first)
     /// </summary>
-    /// <param name="count">Number of top rated sessions to return (default: 10)</param>
-    /// <returns>List of top rated brew sessions</returns>
+    /// <param name="count">Number of top rated sessions to return. Must be between 1 and 100. Default: 10</param>
+    /// <returns>List of top rated brew sessions ordered by rating descending</returns>
     [HttpGet("top-rated")]
     [ProducesResponseType(typeof(IEnumerable<BrewSessionResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

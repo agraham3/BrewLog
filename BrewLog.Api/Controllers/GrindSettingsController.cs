@@ -21,14 +21,14 @@ public class GrindSettingsController : ControllerBase
     /// <summary>
     /// Get all grind settings with optional filtering
     /// </summary>
-    /// <param name="minGrindSize">Filter by minimum grind size (1-30 scale)</param>
-    /// <param name="maxGrindSize">Filter by maximum grind size (1-30 scale)</param>
-    /// <param name="grinderType">Filter by grinder type (partial match)</param>
-    /// <param name="minGrindWeight">Filter by minimum grind weight in grams</param>
-    /// <param name="maxGrindWeight">Filter by maximum grind weight in grams</param>
-    /// <param name="createdAfter">Filter by creation date (after)</param>
-    /// <param name="createdBefore">Filter by creation date (before)</param>
-    /// <returns>List of grind settings</returns>
+    /// <param name="minGrindSize">Filter by minimum grind size on a 1-30 scale where 1=finest (espresso) and 30=coarsest (cold brew). Settings with grind size >= this value will be returned.</param>
+    /// <param name="maxGrindSize">Filter by maximum grind size on a 1-30 scale where 1=finest (espresso) and 30=coarsest (cold brew). Settings with grind size <= this value will be returned.</param>
+    /// <param name="grinderType">Filter by grinder type using partial case-insensitive matching. Example: "burr" will match "Burr Grinder" and "Conical Burr"</param>
+    /// <param name="minGrindWeight">Filter by minimum grind weight in grams. Settings with weight >= this value will be returned. Typical range: 10-50 grams.</param>
+    /// <param name="maxGrindWeight">Filter by maximum grind weight in grams. Settings with weight <= this value will be returned. Typical range: 10-50 grams.</param>
+    /// <param name="createdAfter">Filter by creation date (inclusive). Only settings created on or after this date will be returned. Format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS</param>
+    /// <param name="createdBefore">Filter by creation date (inclusive). Only settings created on or before this date will be returned. Format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS</param>
+    /// <returns>List of grind settings matching the specified filters, ordered by creation date descending</returns>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<GrindSettingResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -62,8 +62,8 @@ public class GrindSettingsController : ControllerBase
     /// <summary>
     /// Get a specific grind setting by ID
     /// </summary>
-    /// <param name="id">Grind setting ID</param>
-    /// <returns>Grind setting details</returns>
+    /// <param name="id">The unique identifier of the grind setting to retrieve. Must be a positive integer.</param>
+    /// <returns>Grind setting details including grind size, weight, grinder type, and usage statistics</returns>
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(GrindSettingResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -177,10 +177,10 @@ public class GrindSettingsController : ControllerBase
     }
 
     /// <summary>
-    /// Get recently used grind settings
+    /// Get recently used grind settings ordered by last usage date (most recent first)
     /// </summary>
-    /// <param name="count">Number of recent settings to return (default: 10)</param>
-    /// <returns>List of recently used grind settings</returns>
+    /// <param name="count">Number of recent settings to return. Must be between 1 and 100. Default: 10</param>
+    /// <returns>List of recently used grind settings ordered by last usage date descending</returns>
     [HttpGet("recent")]
     [ProducesResponseType(typeof(IEnumerable<GrindSettingResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -198,10 +198,10 @@ public class GrindSettingsController : ControllerBase
     }
 
     /// <summary>
-    /// Get most used grind settings
+    /// Get most used grind settings ordered by usage frequency (most used first)
     /// </summary>
-    /// <param name="count">Number of most used settings to return (default: 10)</param>
-    /// <returns>List of most used grind settings</returns>
+    /// <param name="count">Number of most used settings to return. Must be between 1 and 100. Default: 10</param>
+    /// <returns>List of most used grind settings ordered by usage frequency descending</returns>
     [HttpGet("most-used")]
     [ProducesResponseType(typeof(IEnumerable<GrindSettingResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

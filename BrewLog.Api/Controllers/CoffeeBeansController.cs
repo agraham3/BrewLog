@@ -21,13 +21,13 @@ public class CoffeeBeansController : ControllerBase
     /// <summary>
     /// Get all coffee beans with optional filtering
     /// </summary>
-    /// <param name="name">Filter by name (partial match)</param>
-    /// <param name="brand">Filter by brand (partial match)</param>
-    /// <param name="roastLevel">Filter by roast level</param>
-    /// <param name="origin">Filter by origin (partial match)</param>
-    /// <param name="createdAfter">Filter by creation date (after)</param>
-    /// <param name="createdBefore">Filter by creation date (before)</param>
-    /// <returns>List of coffee beans</returns>
+    /// <param name="name">Filter by coffee bean name using partial case-insensitive matching. Example: "ethiopian" will match "Ethiopian Yirgacheffe"</param>
+    /// <param name="brand">Filter by brand name using partial case-insensitive matching. Example: "blue" will match "Blue Bottle Coffee"</param>
+    /// <param name="roastLevel">Filter by roast level using integer values: 0=Light, 1=MediumLight, 2=Medium, 3=MediumDark, 4=Dark. String values also accepted: "Light", "Medium", etc.</param>
+    /// <param name="origin">Filter by origin/region using partial case-insensitive matching. Example: "ethiopia" will match "Ethiopia, Sidamo"</param>
+    /// <param name="createdAfter">Filter by creation date (inclusive). Only beans created on or after this date will be returned. Format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS</param>
+    /// <param name="createdBefore">Filter by creation date (inclusive). Only beans created on or before this date will be returned. Format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS</param>
+    /// <returns>List of coffee beans matching the specified filters</returns>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<CoffeeBeanResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -59,8 +59,8 @@ public class CoffeeBeansController : ControllerBase
     /// <summary>
     /// Get a specific coffee bean by ID
     /// </summary>
-    /// <param name="id">Coffee bean ID</param>
-    /// <returns>Coffee bean details</returns>
+    /// <param name="id">The unique identifier of the coffee bean to retrieve. Must be a positive integer.</param>
+    /// <returns>Coffee bean details including all properties and relationships</returns>
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(CoffeeBeanResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -174,10 +174,10 @@ public class CoffeeBeansController : ControllerBase
     }
 
     /// <summary>
-    /// Get recently added coffee beans
+    /// Get recently added coffee beans ordered by creation date (newest first)
     /// </summary>
-    /// <param name="count">Number of recent beans to return (default: 10)</param>
-    /// <returns>List of recently added coffee beans</returns>
+    /// <param name="count">Number of recent beans to return. Must be between 1 and 100. Default: 10</param>
+    /// <returns>List of recently added coffee beans ordered by creation date descending</returns>
     [HttpGet("recent")]
     [ProducesResponseType(typeof(IEnumerable<CoffeeBeanResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -195,10 +195,10 @@ public class CoffeeBeansController : ControllerBase
     }
 
     /// <summary>
-    /// Get most used coffee beans
+    /// Get most used coffee beans ordered by usage frequency (most used first)
     /// </summary>
-    /// <param name="count">Number of most used beans to return (default: 10)</param>
-    /// <returns>List of most used coffee beans</returns>
+    /// <param name="count">Number of most used beans to return. Must be between 1 and 100. Default: 10</param>
+    /// <returns>List of most used coffee beans ordered by usage frequency descending</returns>
     [HttpGet("most-used")]
     [ProducesResponseType(typeof(IEnumerable<CoffeeBeanResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
