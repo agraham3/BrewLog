@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using BrewLog.Api.Services;
 using BrewLog.Api.DTOs;
 using BrewLog.Api.Services.Exceptions;
+using BrewLog.Api.Attributes;
 
 namespace BrewLog.Api.Controllers;
 
@@ -31,6 +32,9 @@ public class CoffeeBeansController : ControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<CoffeeBeanResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "CoffeeBeansCollection", "Collection of coffee beans with filtering applied")]
+    [SwaggerResponseExample(200, "CoffeeBeansEmpty", "Empty collection when no beans match filters")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<CoffeeBeanResponseDto>>> GetCoffeeBeans(
         [FromQuery] string? name = null,
         [FromQuery] string? brand = null,
@@ -65,6 +69,9 @@ public class CoffeeBeansController : ControllerBase
     [ProducesResponseType(typeof(CoffeeBeanResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "CoffeeBeanSuccess", "Successfully retrieved coffee bean")]
+    [SwaggerResponseExample(404, "NotFoundError", "Coffee bean not found")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<CoffeeBeanResponseDto>> GetCoffeeBean(int id)
     {
         _logger.LogInformation("Getting coffee bean with ID: {Id}", id);
@@ -89,6 +96,9 @@ public class CoffeeBeansController : ControllerBase
     [ProducesResponseType(typeof(CoffeeBeanResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(201, "CoffeeBeanSuccess", "Successfully created coffee bean")]
+    [SwaggerResponseExample(400, "ValidationError", "Validation errors in request data")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<CoffeeBeanResponseDto>> CreateCoffeeBean([FromBody] CreateCoffeeBeanDto createDto)
     {
         _logger.LogInformation("Creating new coffee bean: {Name} by {Brand}", createDto.Name, createDto.Brand);
@@ -119,6 +129,10 @@ public class CoffeeBeansController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "CoffeeBeanSuccess", "Successfully updated coffee bean")]
+    [SwaggerResponseExample(400, "ValidationError", "Validation errors in request data")]
+    [SwaggerResponseExample(404, "NotFoundError", "Coffee bean not found")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<CoffeeBeanResponseDto>> UpdateCoffeeBean(int id, [FromBody] UpdateCoffeeBeanDto updateDto)
     {
         _logger.LogInformation("Updating coffee bean with ID: {Id}", id);
@@ -151,6 +165,9 @@ public class CoffeeBeansController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(404, "NotFoundError", "Coffee bean not found")]
+    [SwaggerResponseExample(409, "ConflictError", "Cannot delete coffee bean due to existing references")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<IActionResult> DeleteCoffeeBean(int id)
     {
         _logger.LogInformation("Deleting coffee bean with ID: {Id}", id);
@@ -181,6 +198,9 @@ public class CoffeeBeansController : ControllerBase
     [HttpGet("recent")]
     [ProducesResponseType(typeof(IEnumerable<CoffeeBeanResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "CoffeeBeansCollection", "Collection of recently added coffee beans")]
+    [SwaggerResponseExample(200, "CoffeeBeansEmpty", "Empty collection when no recent beans exist")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<CoffeeBeanResponseDto>>> GetRecentCoffeeBeans([FromQuery] int count = 10)
     {
         _logger.LogInformation("Getting {Count} recently added coffee beans", count);
@@ -202,6 +222,9 @@ public class CoffeeBeansController : ControllerBase
     [HttpGet("most-used")]
     [ProducesResponseType(typeof(IEnumerable<CoffeeBeanResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "CoffeeBeansCollection", "Collection of most used coffee beans")]
+    [SwaggerResponseExample(200, "CoffeeBeansEmpty", "Empty collection when no usage data exists")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<CoffeeBeanResponseDto>>> GetMostUsedCoffeeBeans([FromQuery] int count = 10)
     {
         _logger.LogInformation("Getting {Count} most used coffee beans", count);

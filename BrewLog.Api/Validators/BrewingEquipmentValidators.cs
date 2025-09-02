@@ -1,6 +1,7 @@
 using FluentValidation;
 using BrewLog.Api.DTOs;
 using BrewLog.Api.Models;
+using BrewLog.Api.Validators.Extensions;
 
 namespace BrewLog.Api.Validators;
 
@@ -21,8 +22,7 @@ public class CreateBrewingEquipmentDtoValidator : AbstractValidator<CreateBrewin
             .WithMessage("Model cannot exceed 100 characters");
 
         RuleFor(x => x.Type)
-            .IsInEnum()
-            .WithMessage("Invalid equipment type");
+            .IsValidEnumWithDetails();
 
         RuleFor(x => x.Specifications)
             .NotNull()
@@ -107,8 +107,7 @@ public class UpdateBrewingEquipmentDtoValidator : AbstractValidator<UpdateBrewin
             .WithMessage("Model cannot exceed 100 characters");
 
         RuleFor(x => x.Type)
-            .IsInEnum()
-            .WithMessage("Invalid equipment type");
+            .IsValidEnumWithDetails();
 
         RuleFor(x => x.Specifications)
             .NotNull()

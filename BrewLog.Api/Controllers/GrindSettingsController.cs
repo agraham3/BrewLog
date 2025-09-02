@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using BrewLog.Api.Services;
 using BrewLog.Api.DTOs;
 using BrewLog.Api.Services.Exceptions;
+using BrewLog.Api.Attributes;
 
 namespace BrewLog.Api.Controllers;
 
@@ -32,6 +33,9 @@ public class GrindSettingsController : ControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<GrindSettingResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "GrindSettingsCollection", "Collection of grind settings with filtering applied")]
+    [SwaggerResponseExample(200, "GrindSettingsEmpty", "Empty collection when no settings match filters")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<GrindSettingResponseDto>>> GetGrindSettings(
         [FromQuery] int? minGrindSize = null,
         [FromQuery] int? maxGrindSize = null,
@@ -68,6 +72,9 @@ public class GrindSettingsController : ControllerBase
     [ProducesResponseType(typeof(GrindSettingResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "GrindSettingSuccess", "Successfully retrieved grind setting")]
+    [SwaggerResponseExample(404, "NotFoundError", "Grind setting not found")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<GrindSettingResponseDto>> GetGrindSetting(int id)
     {
         _logger.LogInformation("Getting grind setting with ID: {Id}", id);
@@ -92,6 +99,9 @@ public class GrindSettingsController : ControllerBase
     [ProducesResponseType(typeof(GrindSettingResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(201, "GrindSettingSuccess", "Successfully created grind setting")]
+    [SwaggerResponseExample(400, "ValidationError", "Validation errors in request data")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<GrindSettingResponseDto>> CreateGrindSetting([FromBody] CreateGrindSettingDto createDto)
     {
         _logger.LogInformation("Creating new grind setting: Size={GrindSize}, Type={GrinderType}", createDto.GrindSize, createDto.GrinderType);
@@ -122,6 +132,10 @@ public class GrindSettingsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "GrindSettingSuccess", "Successfully updated grind setting")]
+    [SwaggerResponseExample(400, "ValidationError", "Validation errors in request data")]
+    [SwaggerResponseExample(404, "NotFoundError", "Grind setting not found")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<GrindSettingResponseDto>> UpdateGrindSetting(int id, [FromBody] UpdateGrindSettingDto updateDto)
     {
         _logger.LogInformation("Updating grind setting with ID: {Id}", id);
@@ -154,6 +168,9 @@ public class GrindSettingsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(404, "NotFoundError", "Grind setting not found")]
+    [SwaggerResponseExample(409, "ConflictError", "Cannot delete setting due to existing references")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<IActionResult> DeleteGrindSetting(int id)
     {
         _logger.LogInformation("Deleting grind setting with ID: {Id}", id);
@@ -184,6 +201,9 @@ public class GrindSettingsController : ControllerBase
     [HttpGet("recent")]
     [ProducesResponseType(typeof(IEnumerable<GrindSettingResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "GrindSettingsCollection", "Collection of recently used grind settings")]
+    [SwaggerResponseExample(200, "GrindSettingsEmpty", "Empty collection when no recent settings exist")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<GrindSettingResponseDto>>> GetRecentGrindSettings([FromQuery] int count = 10)
     {
         _logger.LogInformation("Getting {Count} recently used grind settings", count);
@@ -205,6 +225,9 @@ public class GrindSettingsController : ControllerBase
     [HttpGet("most-used")]
     [ProducesResponseType(typeof(IEnumerable<GrindSettingResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "GrindSettingsCollection", "Collection of most used grind settings")]
+    [SwaggerResponseExample(200, "GrindSettingsEmpty", "Empty collection when no usage data exists")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<GrindSettingResponseDto>>> GetMostUsedGrindSettings([FromQuery] int count = 10)
     {
         _logger.LogInformation("Getting {Count} most used grind settings", count);
@@ -225,6 +248,8 @@ public class GrindSettingsController : ControllerBase
     [HttpGet("grinder-types")]
     [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "GrinderTypesCollection", "Collection of distinct grinder types")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<string>>> GetGrinderTypes()
     {
         _logger.LogInformation("Getting distinct grinder types");

@@ -7,6 +7,8 @@ using BrewLog.Api.Middleware;
 using BrewLog.Api.Converters;
 using BrewLog.Api.Models;
 using BrewLog.Api.Filters;
+using BrewLog.Api.Attributes;
+using BrewLog.Api.Examples;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
@@ -90,6 +92,10 @@ builder.Services.AddSwaggerGen(c =>
     // Configure enum serialization to show string values
     c.SchemaFilter<EnumSchemaFilter>();
     c.ParameterFilter<EnumParameterFilter>();
+    
+    // Add response examples
+    c.SchemaFilter<ResponseExamplesSchemaFilter>();
+    c.OperationFilter<ResponseExampleOperationFilter>();
     
     c.UseAllOfToExtendReferenceSchemas();
     c.SupportNonNullableReferenceTypes();

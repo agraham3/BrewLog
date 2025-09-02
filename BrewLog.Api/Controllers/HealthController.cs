@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using BrewLog.Api.DTOs;
+using BrewLog.Api.Attributes;
 
 namespace BrewLog.Api.Controllers;
 
@@ -27,6 +28,7 @@ public class HealthController : ControllerBase
     /// </example>
     [HttpGet]
     [ProducesResponseType(typeof(HealthResponseDto), StatusCodes.Status200OK)]
+    [SwaggerResponseExample(200, "HealthSuccess", "API health status")]
     public ActionResult<HealthResponseDto> Get()
     {
         var response = new HealthResponseDto

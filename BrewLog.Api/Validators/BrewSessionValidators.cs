@@ -1,6 +1,7 @@
 using FluentValidation;
 using BrewLog.Api.DTOs;
 using BrewLog.Api.Models;
+using BrewLog.Api.Validators.Extensions;
 
 namespace BrewLog.Api.Validators;
 
@@ -9,8 +10,7 @@ public class CreateBrewSessionDtoValidator : AbstractValidator<CreateBrewSession
     public CreateBrewSessionDtoValidator()
     {
         RuleFor(x => x.Method)
-            .IsInEnum()
-            .WithMessage("Invalid brew method");
+            .IsValidEnumWithDetails();
 
         RuleFor(x => x.WaterTemperature)
             .GreaterThan(0)
@@ -23,28 +23,28 @@ public class CreateBrewSessionDtoValidator : AbstractValidator<CreateBrewSession
         {
             RuleFor(x => x.WaterTemperature)
                 .InclusiveBetween(88, 96)
-                .WithMessage("Espresso water temperature should be between 88°C and 96°C");
+                .WithMessage(ValidationMessages.Temperature.EspressoRange);
         });
 
         When(x => x.Method == BrewMethod.PourOver, () =>
         {
             RuleFor(x => x.WaterTemperature)
                 .InclusiveBetween(90, 96)
-                .WithMessage("Pour over water temperature should be between 90°C and 96°C");
+                .WithMessage(ValidationMessages.Temperature.PourOverRange);
         });
 
         When(x => x.Method == BrewMethod.FrenchPress, () =>
         {
             RuleFor(x => x.WaterTemperature)
                 .InclusiveBetween(92, 96)
-                .WithMessage("French press water temperature should be between 92°C and 96°C");
+                .WithMessage(ValidationMessages.Temperature.FrenchPressRange);
         });
 
         When(x => x.Method == BrewMethod.ColdBrew, () =>
         {
             RuleFor(x => x.WaterTemperature)
                 .InclusiveBetween(4, 25)
-                .WithMessage("Cold brew water temperature should be between 4°C and 25°C");
+                .WithMessage(ValidationMessages.Temperature.ColdBrewRange);
         });
 
         RuleFor(x => x.BrewTime)
@@ -58,28 +58,28 @@ public class CreateBrewSessionDtoValidator : AbstractValidator<CreateBrewSession
         {
             RuleFor(x => x.BrewTime)
                 .InclusiveBetween(TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(40))
-                .WithMessage("Espresso brew time should be between 20 and 40 seconds");
+                .WithMessage(ValidationMessages.Time.EspressoRange);
         });
 
         When(x => x.Method == BrewMethod.PourOver, () =>
         {
             RuleFor(x => x.BrewTime)
                 .InclusiveBetween(TimeSpan.FromMinutes(2), TimeSpan.FromMinutes(6))
-                .WithMessage("Pour over brew time should be between 2 and 6 minutes");
+                .WithMessage(ValidationMessages.Time.PourOverRange);
         });
 
         When(x => x.Method == BrewMethod.FrenchPress, () =>
         {
             RuleFor(x => x.BrewTime)
                 .InclusiveBetween(TimeSpan.FromMinutes(3), TimeSpan.FromMinutes(5))
-                .WithMessage("French press brew time should be between 3 and 5 minutes");
+                .WithMessage(ValidationMessages.Time.FrenchPressRange);
         });
 
         When(x => x.Method == BrewMethod.ColdBrew, () =>
         {
             RuleFor(x => x.BrewTime)
                 .InclusiveBetween(TimeSpan.FromHours(8), TimeSpan.FromHours(24))
-                .WithMessage("Cold brew time should be between 8 and 24 hours");
+                .WithMessage(ValidationMessages.Time.ColdBrewRange);
         });
 
         RuleFor(x => x.TastingNotes)
@@ -89,7 +89,7 @@ public class CreateBrewSessionDtoValidator : AbstractValidator<CreateBrewSession
         RuleFor(x => x.Rating)
             .InclusiveBetween(1, 10)
             .When(x => x.Rating.HasValue)
-            .WithMessage("Rating must be between 1 and 10");
+            .WithMessage(ValidationMessages.Rating.Range);
 
         RuleFor(x => x.CoffeeBeanId)
             .GreaterThan(0)
@@ -111,8 +111,7 @@ public class UpdateBrewSessionDtoValidator : AbstractValidator<UpdateBrewSession
     public UpdateBrewSessionDtoValidator()
     {
         RuleFor(x => x.Method)
-            .IsInEnum()
-            .WithMessage("Invalid brew method");
+            .IsValidEnumWithDetails();
 
         RuleFor(x => x.WaterTemperature)
             .GreaterThan(0)
@@ -125,28 +124,28 @@ public class UpdateBrewSessionDtoValidator : AbstractValidator<UpdateBrewSession
         {
             RuleFor(x => x.WaterTemperature)
                 .InclusiveBetween(88, 96)
-                .WithMessage("Espresso water temperature should be between 88°C and 96°C");
+                .WithMessage(ValidationMessages.Temperature.EspressoRange);
         });
 
         When(x => x.Method == BrewMethod.PourOver, () =>
         {
             RuleFor(x => x.WaterTemperature)
                 .InclusiveBetween(90, 96)
-                .WithMessage("Pour over water temperature should be between 90°C and 96°C");
+                .WithMessage(ValidationMessages.Temperature.PourOverRange);
         });
 
         When(x => x.Method == BrewMethod.FrenchPress, () =>
         {
             RuleFor(x => x.WaterTemperature)
                 .InclusiveBetween(92, 96)
-                .WithMessage("French press water temperature should be between 92°C and 96°C");
+                .WithMessage(ValidationMessages.Temperature.FrenchPressRange);
         });
 
         When(x => x.Method == BrewMethod.ColdBrew, () =>
         {
             RuleFor(x => x.WaterTemperature)
                 .InclusiveBetween(4, 25)
-                .WithMessage("Cold brew water temperature should be between 4°C and 25°C");
+                .WithMessage(ValidationMessages.Temperature.ColdBrewRange);
         });
 
         RuleFor(x => x.BrewTime)
@@ -160,28 +159,28 @@ public class UpdateBrewSessionDtoValidator : AbstractValidator<UpdateBrewSession
         {
             RuleFor(x => x.BrewTime)
                 .InclusiveBetween(TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(40))
-                .WithMessage("Espresso brew time should be between 20 and 40 seconds");
+                .WithMessage(ValidationMessages.Time.EspressoRange);
         });
 
         When(x => x.Method == BrewMethod.PourOver, () =>
         {
             RuleFor(x => x.BrewTime)
                 .InclusiveBetween(TimeSpan.FromMinutes(2), TimeSpan.FromMinutes(6))
-                .WithMessage("Pour over brew time should be between 2 and 6 minutes");
+                .WithMessage(ValidationMessages.Time.PourOverRange);
         });
 
         When(x => x.Method == BrewMethod.FrenchPress, () =>
         {
             RuleFor(x => x.BrewTime)
                 .InclusiveBetween(TimeSpan.FromMinutes(3), TimeSpan.FromMinutes(5))
-                .WithMessage("French press brew time should be between 3 and 5 minutes");
+                .WithMessage(ValidationMessages.Time.FrenchPressRange);
         });
 
         When(x => x.Method == BrewMethod.ColdBrew, () =>
         {
             RuleFor(x => x.BrewTime)
                 .InclusiveBetween(TimeSpan.FromHours(8), TimeSpan.FromHours(24))
-                .WithMessage("Cold brew time should be between 8 and 24 hours");
+                .WithMessage(ValidationMessages.Time.ColdBrewRange);
         });
 
         RuleFor(x => x.TastingNotes)
@@ -191,7 +190,7 @@ public class UpdateBrewSessionDtoValidator : AbstractValidator<UpdateBrewSession
         RuleFor(x => x.Rating)
             .InclusiveBetween(1, 10)
             .When(x => x.Rating.HasValue)
-            .WithMessage("Rating must be between 1 and 10");
+            .WithMessage(ValidationMessages.Rating.Range);
 
         RuleFor(x => x.CoffeeBeanId)
             .GreaterThan(0)

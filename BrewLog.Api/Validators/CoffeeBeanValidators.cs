@@ -1,6 +1,7 @@
 using FluentValidation;
 using BrewLog.Api.DTOs;
 using BrewLog.Api.Models;
+using BrewLog.Api.Validators.Extensions;
 
 namespace BrewLog.Api.Validators;
 
@@ -21,8 +22,7 @@ public class CreateCoffeeBeanDtoValidator : AbstractValidator<CreateCoffeeBeanDt
             .WithMessage("Brand cannot exceed 100 characters");
 
         RuleFor(x => x.RoastLevel)
-            .IsInEnum()
-            .WithMessage("Invalid roast level");
+            .IsValidEnumWithDetails();
 
         RuleFor(x => x.Origin)
             .NotEmpty()
@@ -49,8 +49,7 @@ public class UpdateCoffeeBeanDtoValidator : AbstractValidator<UpdateCoffeeBeanDt
             .WithMessage("Brand cannot exceed 100 characters");
 
         RuleFor(x => x.RoastLevel)
-            .IsInEnum()
-            .WithMessage("Invalid roast level");
+            .IsValidEnumWithDetails();
 
         RuleFor(x => x.Origin)
             .NotEmpty()

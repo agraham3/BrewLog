@@ -1,5 +1,6 @@
 using FluentValidation;
 using BrewLog.Api.DTOs;
+using BrewLog.Api.Validators.Extensions;
 
 namespace BrewLog.Api.Validators;
 
@@ -9,7 +10,7 @@ public class CreateGrindSettingDtoValidator : AbstractValidator<CreateGrindSetti
     {
         RuleFor(x => x.GrindSize)
             .InclusiveBetween(1, 30)
-            .WithMessage("Grind size must be between 1 and 30");
+            .WithMessage(ValidationMessages.GrindSize.Range);
 
         RuleFor(x => x.GrindTime)
             .GreaterThan(TimeSpan.Zero)
@@ -21,7 +22,7 @@ public class CreateGrindSettingDtoValidator : AbstractValidator<CreateGrindSetti
             .GreaterThan(0)
             .WithMessage("Grind weight must be greater than zero")
             .LessThanOrEqualTo(1000)
-            .WithMessage("Grind weight cannot exceed 1000 grams");
+            .WithMessage(ValidationMessages.Weight.GrindWeightRange);
 
         RuleFor(x => x.GrinderType)
             .NotEmpty()
@@ -41,7 +42,7 @@ public class UpdateGrindSettingDtoValidator : AbstractValidator<UpdateGrindSetti
     {
         RuleFor(x => x.GrindSize)
             .InclusiveBetween(1, 30)
-            .WithMessage("Grind size must be between 1 and 30");
+            .WithMessage(ValidationMessages.GrindSize.Range);
 
         RuleFor(x => x.GrindTime)
             .GreaterThan(TimeSpan.Zero)
@@ -53,7 +54,7 @@ public class UpdateGrindSettingDtoValidator : AbstractValidator<UpdateGrindSetti
             .GreaterThan(0)
             .WithMessage("Grind weight must be greater than zero")
             .LessThanOrEqualTo(1000)
-            .WithMessage("Grind weight cannot exceed 1000 grams");
+            .WithMessage(ValidationMessages.Weight.GrindWeightRange);
 
         RuleFor(x => x.GrinderType)
             .NotEmpty()

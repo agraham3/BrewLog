@@ -3,6 +3,7 @@ using BrewLog.Api.Services;
 using BrewLog.Api.DTOs;
 using BrewLog.Api.Services.Exceptions;
 using BrewLog.Api.Models;
+using BrewLog.Api.Attributes;
 
 namespace BrewLog.Api.Controllers;
 
@@ -31,6 +32,9 @@ public class BrewingEquipmentController : ControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<BrewingEquipmentResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "BrewingEquipmentCollection", "Collection of brewing equipment with filtering applied")]
+    [SwaggerResponseExample(200, "BrewingEquipmentEmpty", "Empty collection when no equipment matches filters")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<BrewingEquipmentResponseDto>>> GetBrewingEquipment(
         [FromQuery] int? type = null,
         [FromQuery] string? vendor = null,
@@ -63,6 +67,9 @@ public class BrewingEquipmentController : ControllerBase
     [ProducesResponseType(typeof(BrewingEquipmentResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "BrewingEquipmentSuccess", "Successfully retrieved brewing equipment")]
+    [SwaggerResponseExample(404, "NotFoundError", "Brewing equipment not found")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<BrewingEquipmentResponseDto>> GetBrewingEquipment(int id)
     {
         _logger.LogInformation("Getting brewing equipment with ID: {Id}", id);
@@ -87,6 +94,9 @@ public class BrewingEquipmentController : ControllerBase
     [ProducesResponseType(typeof(BrewingEquipmentResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(201, "BrewingEquipmentSuccess", "Successfully created brewing equipment")]
+    [SwaggerResponseExample(400, "ValidationError", "Validation errors in request data")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<BrewingEquipmentResponseDto>> CreateBrewingEquipment([FromBody] CreateBrewingEquipmentDto createDto)
     {
         _logger.LogInformation("Creating new brewing equipment: {Vendor} {Model} ({Type})", 
@@ -118,6 +128,10 @@ public class BrewingEquipmentController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "BrewingEquipmentSuccess", "Successfully updated brewing equipment")]
+    [SwaggerResponseExample(400, "ValidationError", "Validation errors in request data")]
+    [SwaggerResponseExample(404, "NotFoundError", "Brewing equipment not found")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<BrewingEquipmentResponseDto>> UpdateBrewingEquipment(int id, [FromBody] UpdateBrewingEquipmentDto updateDto)
     {
         _logger.LogInformation("Updating brewing equipment with ID: {Id}", id);
@@ -150,6 +164,9 @@ public class BrewingEquipmentController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(404, "NotFoundError", "Brewing equipment not found")]
+    [SwaggerResponseExample(409, "ConflictError", "Cannot delete equipment due to existing references")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<IActionResult> DeleteBrewingEquipment(int id)
     {
         _logger.LogInformation("Deleting brewing equipment with ID: {Id}", id);
@@ -180,6 +197,9 @@ public class BrewingEquipmentController : ControllerBase
     [HttpGet("most-used")]
     [ProducesResponseType(typeof(IEnumerable<BrewingEquipmentResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "BrewingEquipmentCollection", "Collection of most used brewing equipment")]
+    [SwaggerResponseExample(200, "BrewingEquipmentEmpty", "Empty collection when no usage data exists")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<BrewingEquipmentResponseDto>>> GetMostUsedBrewingEquipment([FromQuery] int count = 10)
     {
         _logger.LogInformation("Getting {Count} most used brewing equipment", count);
@@ -200,6 +220,8 @@ public class BrewingEquipmentController : ControllerBase
     [HttpGet("vendors")]
     [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "VendorsCollection", "Collection of distinct equipment vendors")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<string>>> GetDistinctVendors()
     {
         _logger.LogInformation("Getting distinct equipment vendors");
@@ -215,6 +237,8 @@ public class BrewingEquipmentController : ControllerBase
     [HttpGet("models")]
     [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "ModelsCollection", "Collection of distinct equipment models")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<string>>> GetDistinctModels()
     {
         _logger.LogInformation("Getting distinct equipment models");

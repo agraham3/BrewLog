@@ -3,6 +3,7 @@ using BrewLog.Api.Services;
 using BrewLog.Api.DTOs;
 using BrewLog.Api.Services.Exceptions;
 using BrewLog.Api.Models;
+using BrewLog.Api.Attributes;
 
 namespace BrewLog.Api.Controllers;
 
@@ -37,6 +38,9 @@ public class BrewSessionsController : ControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<BrewSessionResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "BrewSessionsCollection", "Collection of brew sessions with filtering applied")]
+    [SwaggerResponseExample(200, "BrewSessionsEmpty", "Empty collection when no sessions match filters")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<BrewSessionResponseDto>>> GetBrewSessions(
         [FromQuery] int? method = null,
         [FromQuery] int? coffeeBeanId = null,
@@ -81,6 +85,9 @@ public class BrewSessionsController : ControllerBase
     [ProducesResponseType(typeof(BrewSessionResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "BrewSessionSuccess", "Successfully retrieved brew session")]
+    [SwaggerResponseExample(404, "NotFoundError", "Brew session not found")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<BrewSessionResponseDto>> GetBrewSession(int id)
     {
         _logger.LogInformation("Getting brew session with ID: {Id}", id);
@@ -105,6 +112,9 @@ public class BrewSessionsController : ControllerBase
     [ProducesResponseType(typeof(BrewSessionResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(201, "BrewSessionSuccess", "Successfully created brew session")]
+    [SwaggerResponseExample(400, "ValidationError", "Validation errors in request data")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<BrewSessionResponseDto>> CreateBrewSession([FromBody] CreateBrewSessionDto createDto)
     {
         _logger.LogInformation("Creating new brew session: Method={Method}, Bean={BeanId}, Rating={Rating}",
@@ -144,6 +154,10 @@ public class BrewSessionsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "BrewSessionSuccess", "Successfully updated brew session")]
+    [SwaggerResponseExample(400, "ValidationError", "Validation errors in request data")]
+    [SwaggerResponseExample(404, "NotFoundError", "Brew session not found")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<BrewSessionResponseDto>> UpdateBrewSession(int id, [FromBody] UpdateBrewSessionDto updateDto)
     {
         _logger.LogInformation("Updating brew session with ID: {Id}", id);
@@ -180,6 +194,8 @@ public class BrewSessionsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(404, "NotFoundError", "Brew session not found")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<IActionResult> DeleteBrewSession(int id)
     {
         _logger.LogInformation("Deleting brew session with ID: {Id}", id);
@@ -206,6 +222,9 @@ public class BrewSessionsController : ControllerBase
     [ProducesResponseType(typeof(BrewSessionResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "BrewSessionSuccess", "Successfully toggled favorite status")]
+    [SwaggerResponseExample(404, "NotFoundError", "Brew session not found")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<BrewSessionResponseDto>> ToggleFavorite(int id)
     {
         _logger.LogInformation("Toggling favorite status for brew session with ID: {Id}", id);
@@ -231,6 +250,9 @@ public class BrewSessionsController : ControllerBase
     [HttpGet("favorites")]
     [ProducesResponseType(typeof(IEnumerable<BrewSessionResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "BrewSessionsCollection", "Collection of favorite brew sessions")]
+    [SwaggerResponseExample(200, "BrewSessionsEmpty", "Empty collection when no favorites exist")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<BrewSessionResponseDto>>> GetFavorites()
     {
         _logger.LogInformation("Getting favorite brew sessions");
@@ -248,6 +270,10 @@ public class BrewSessionsController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<BrewSessionResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "BrewSessionsCollection", "Collection of recent brew sessions")]
+    [SwaggerResponseExample(200, "BrewSessionsEmpty", "Empty collection when no recent sessions exist")]
+    [SwaggerResponseExample(400, "ValidationError", "Invalid count parameter")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<BrewSessionResponseDto>>> GetRecent([FromQuery] int count = 10)
     {
         _logger.LogInformation("Getting {Count} recent brew sessions", count);
@@ -270,6 +296,10 @@ public class BrewSessionsController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<BrewSessionResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(200, "BrewSessionsCollection", "Collection of top rated brew sessions")]
+    [SwaggerResponseExample(200, "BrewSessionsEmpty", "Empty collection when no rated sessions exist")]
+    [SwaggerResponseExample(400, "ValidationError", "Invalid count parameter")]
+    [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<BrewSessionResponseDto>>> GetTopRated([FromQuery] int count = 10)
     {
         _logger.LogInformation("Getting {Count} top rated brew sessions", count);
