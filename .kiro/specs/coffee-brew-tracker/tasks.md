@@ -98,7 +98,7 @@
   - Write integration tests for GrindSettingsController
   - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-- [ ] 12. Create BrewingEquipmentController with type-based filtering
+- [x] 12. Create BrewingEquipmentController with type-based filtering
   - Implement GET /api/equipment with filtering by type and vendor
   - Implement GET /api/equipment/{id} for single equipment retrieval
   - Implement POST /api/equipment for creating new equipment

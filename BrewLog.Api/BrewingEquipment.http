@@ -1,0 +1,72 @@
+### Get all brewing equipment
+GET {{BrewLog.Api_HostAddress}}/api/equipment
+
+### Get all brewing equipment with type filter (EspressoMachine = 0)
+GET {{BrewLog.Api_HostAddress}}/api/equipment?type=0
+
+### Get all brewing equipment with vendor filter
+GET {{BrewLog.Api_HostAddress}}/api/equipment?vendor=Breville
+
+### Get all brewing equipment with type and vendor filter
+GET {{BrewLog.Api_HostAddress}}/api/equipment?type=0&vendor=Breville
+
+### Get specific brewing equipment by ID
+GET {{BrewLog.Api_HostAddress}}/api/equipment/1
+
+### Create new brewing equipment
+POST {{BrewLog.Api_HostAddress}}/api/equipment
+Content-Type: application/json
+
+{
+  "vendor": "Breville",
+  "model": "Barista Express",
+  "type": 0,
+  "specifications": {
+    "pressure": "15 bar",
+    "boilerType": "Thermocoil",
+    "grinder": "Built-in conical burr"
+  }
+}
+
+### Create grinder equipment
+POST {{BrewLog.Api_HostAddress}}/api/equipment
+Content-Type: application/json
+
+{
+  "vendor": "Baratza",
+  "model": "Encore",
+  "type": 1,
+  "specifications": {
+    "burrType": "Conical ceramic",
+    "grindSettings": "40",
+    "capacity": "227g"
+  }
+}
+
+### Update brewing equipment
+PUT {{BrewLog.Api_HostAddress}}/api/equipment/1
+Content-Type: application/json
+
+{
+  "vendor": "Breville",
+  "model": "Barista Express Updated",
+  "type": 0,
+  "specifications": {
+    "pressure": "15 bar",
+    "boilerType": "Thermocoil",
+    "grinder": "Built-in conical burr",
+    "updated": "true"
+  }
+}
+
+### Delete brewing equipment
+DELETE {{BrewLog.Api_HostAddress}}/api/equipment/1
+
+### Get most used brewing equipment
+GET {{BrewLog.Api_HostAddress}}/api/equipment/most-used?count=5
+
+### Get distinct vendors
+GET {{BrewLog.Api_HostAddress}}/api/equipment/vendors
+
+### Get distinct models
+GET {{BrewLog.Api_HostAddress}}/api/equipment/models
