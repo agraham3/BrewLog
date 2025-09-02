@@ -128,7 +128,7 @@ public class CoffeeBeanValidatorTests
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.RoastLevel)
-            .WithErrorMessage("Invalid roast level");
+            .WithErrorMessage("Invalid RoastLevel. Accepted values: Light, MediumLight, Medium, MediumDark, Dark");
     }
 
     [Fact]

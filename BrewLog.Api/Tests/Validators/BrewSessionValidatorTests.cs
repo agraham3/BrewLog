@@ -55,7 +55,7 @@ public class BrewSessionValidatorTests
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Method)
-            .WithErrorMessage("Invalid brew method");
+            .WithErrorMessage("Invalid BrewMethod. Accepted values: Espresso, FrenchPress, PourOver, Drip, AeroPress, ColdBrew");
     }
 
     [Theory]
@@ -125,7 +125,7 @@ public class BrewSessionValidatorTests
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.WaterTemperature)
-            .WithErrorMessage("Espresso water temperature should be between 88°C and 96°C");
+            .WithErrorMessage("Espresso water temperature should be between 88°C and 96°C for optimal extraction");
     }
 
     [Fact]
@@ -170,7 +170,7 @@ public class BrewSessionValidatorTests
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.WaterTemperature)
-            .WithErrorMessage("Cold brew water temperature should be between 4°C and 25°C");
+            .WithErrorMessage("Cold brew water temperature should be between 4°C and 25°C (room temperature or cold)");
     }
 
     [Fact]
@@ -259,7 +259,7 @@ public class BrewSessionValidatorTests
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.BrewTime)
-            .WithErrorMessage("Espresso brew time should be between 20 and 40 seconds");
+            .WithErrorMessage("Espresso brew time should be between 20 and 40 seconds for proper extraction");
     }
 
     [Fact]
@@ -328,7 +328,7 @@ public class BrewSessionValidatorTests
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Rating)
-            .WithErrorMessage("Rating must be between 1 and 10");
+            .WithErrorMessage("Rating must be between 1 and 10, where 1 is poor and 10 is excellent");
     }
 
     [Theory]

@@ -53,7 +53,7 @@ public class GrindSettingValidatorTests
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.GrindSize)
-            .WithErrorMessage("Grind size must be between 1 and 30");
+            .WithErrorMessage("Grind size must be between 1 (finest, for espresso) and 30 (coarsest, for cold brew)");
     }
 
     [Theory]
@@ -163,7 +163,7 @@ public class GrindSettingValidatorTests
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.GrindWeight)
-            .WithErrorMessage("Grind weight cannot exceed 1000 grams");
+            .WithErrorMessage("Grind weight must be between 0.1g and 1000g (typical range: 15-30g for most brewing methods)");
     }
 
     [Fact]

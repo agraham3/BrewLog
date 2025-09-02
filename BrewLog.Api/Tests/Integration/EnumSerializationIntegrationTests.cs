@@ -39,6 +39,14 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             });
         });
     }
+
+    protected override IWebHostBuilder CreateWebHostBuilder()
+    {
+        return new WebHostBuilder()
+            .UseStartup<Program>()
+            .UseContentRoot(Directory.GetCurrentDirectory())
+            .UseEnvironment("Testing");
+    }
 }
 
 /// <summary>

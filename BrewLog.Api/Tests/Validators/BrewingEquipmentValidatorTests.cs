@@ -131,7 +131,7 @@ public class BrewingEquipmentValidatorTests
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Type)
-            .WithErrorMessage("Invalid equipment type");
+            .WithErrorMessage("Invalid EquipmentType. Accepted values: EspressoMachine, Grinder, FrenchPress, PourOverSetup, DripMachine, AeroPress");
     }
 
     [Fact]
