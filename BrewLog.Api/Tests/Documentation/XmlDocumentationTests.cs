@@ -282,17 +282,48 @@ public class XmlDocumentationTests
         {
             var xmlContent = File.ReadAllText(xmlDocPath);
             var parameters = method.GetParameters();
-            var parameterTypes = string.Join(",", parameters.Select(p => p.ParameterType.FullName));
-            var memberName = parameters.Length > 0 
-                ? $"M:{method.DeclaringType!.FullName}.{method.Name}({parameterTypes})"
-                : $"M:{method.DeclaringType!.FullName}.{method.Name}";
             
-            return xmlContent.Contains($"<member name=\"{memberName}\">");
+            // Try different variations of the member name to handle overloads
+            var memberNames = new List<string>();
+            
+            if (parameters.Length > 0)
+            {
+                // Full parameter type names with proper XML formatting
+                var parameterTypes = string.Join(",", parameters.Select(p => GetXmlTypeName(p.ParameterType)));
+                memberNames.Add($"M:{method.DeclaringType!.FullName}.{method.Name}({parameterTypes})");
+            }
+            else
+            {
+                memberNames.Add($"M:{method.DeclaringType!.FullName}.{method.Name}");
+            }
+            
+            // Check if any of the member name variations exist in the XML
+            return memberNames.Any(memberName => xmlContent.Contains($"<member name=\"{memberName}\">"));
         }
         catch
         {
             return false;
         }
+    }
+
+    private static string GetXmlTypeName(Type type)
+    {
+        // Handle nullable types
+        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+        {
+            var underlyingType = Nullable.GetUnderlyingType(type);
+            return $"System.Nullable{{{GetXmlTypeName(underlyingType!)}}}";
+        }
+        
+        // Handle other generic types
+        if (type.IsGenericType)
+        {
+            var genericTypeName = type.GetGenericTypeDefinition().FullName;
+            var genericArgs = string.Join(",", type.GetGenericArguments().Select(GetXmlTypeName));
+            return $"{genericTypeName!.Split('`')[0]}{{{genericArgs}}}";
+        }
+        
+        return type.FullName ?? type.Name;
     }
 
     private static bool HasXmlDocumentation(FieldInfo field, string xmlDocPath)

@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using BrewLog.Api.Data;
@@ -33,6 +34,11 @@ builder.Services.AddControllers()
         // Handle null values appropriately
         options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
     });
+
+// Register custom type converters for query parameter binding
+TypeDescriptor.AddAttributes(typeof(RoastLevel), new TypeConverterAttribute(typeof(EnumTypeConverter<RoastLevel>)));
+TypeDescriptor.AddAttributes(typeof(BrewMethod), new TypeConverterAttribute(typeof(EnumTypeConverter<BrewMethod>)));
+TypeDescriptor.AddAttributes(typeof(EquipmentType), new TypeConverterAttribute(typeof(EnumTypeConverter<EquipmentType>)));
 
 // Configure Entity Framework with SQLite
 builder.Services.AddDbContext<BrewLogDbContext>(options =>
@@ -136,11 +142,14 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Apply pending migrations
-using (var scope = app.Services.CreateScope())
+// Apply pending migrations (skip in testing environment)
+if (!app.Environment.IsEnvironment("Testing"))
 {
-    var context = scope.ServiceProvider.GetRequiredService<BrewLogDbContext>();
-    context.Database.Migrate();
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<BrewLogDbContext>();
+        context.Database.Migrate();
+    }
 }
 
 app.Run();

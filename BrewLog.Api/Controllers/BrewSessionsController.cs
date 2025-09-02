@@ -42,7 +42,7 @@ public class BrewSessionsController : ControllerBase
     [SwaggerResponseExample(200, "BrewSessionsEmpty", "Empty collection when no sessions match filters")]
     [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<BrewSessionResponseDto>>> GetBrewSessions(
-        [FromQuery] int? method = null,
+        [FromQuery] BrewMethod? method = null,
         [FromQuery] int? coffeeBeanId = null,
         [FromQuery] int? grindSettingId = null,
         [FromQuery] int? brewingEquipmentId = null,
@@ -59,7 +59,7 @@ public class BrewSessionsController : ControllerBase
 
         var filter = new BrewSessionFilterDto
         {
-            Method = method.HasValue ? (BrewMethod)method.Value : null,
+            Method = method,
             CoffeeBeanId = coffeeBeanId,
             GrindSettingId = grindSettingId,
             BrewingEquipmentId = brewingEquipmentId,

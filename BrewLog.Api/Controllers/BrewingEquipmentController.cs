@@ -36,7 +36,7 @@ public class BrewingEquipmentController : ControllerBase
     [SwaggerResponseExample(200, "BrewingEquipmentEmpty", "Empty collection when no equipment matches filters")]
     [SwaggerResponseExample(500, "InternalServerError", "Internal server error")]
     public async Task<ActionResult<IEnumerable<BrewingEquipmentResponseDto>>> GetBrewingEquipment(
-        [FromQuery] int? type = null,
+        [FromQuery] EquipmentType? type = null,
         [FromQuery] string? vendor = null,
         [FromQuery] string? model = null,
         [FromQuery] DateTime? createdAfter = null,
@@ -47,7 +47,7 @@ public class BrewingEquipmentController : ControllerBase
 
         var filter = new BrewingEquipmentFilterDto
         {
-            Type = type.HasValue ? (EquipmentType)type.Value : null,
+            Type = type,
             Vendor = vendor,
             Model = model,
             CreatedAfter = createdAfter,

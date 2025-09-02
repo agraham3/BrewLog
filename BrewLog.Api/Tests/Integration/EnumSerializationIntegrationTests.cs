@@ -1,7 +1,9 @@
 using System.Net;
-using System.Net.Http.Json;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using BrewLog.Api.Converters;
 using BrewLog.Api.Data;
 using BrewLog.Api.DTOs;
 using BrewLog.Api.Models;
@@ -9,7 +11,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Xunit;
 
 namespace BrewLog.Api.Tests.Integration;
@@ -39,14 +41,6 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             });
         });
     }
-
-    protected override IWebHostBuilder CreateWebHostBuilder()
-    {
-        return new WebHostBuilder()
-            .UseStartup<Program>()
-            .UseContentRoot(Directory.GetCurrentDirectory())
-            .UseEnvironment("Testing");
-    }
 }
 
 /// <summary>
@@ -61,6 +55,23 @@ public class EnumSerializationIntegrationTests : IClassFixture<TestWebApplicatio
     {
         _factory = factory;
         _client = _factory.CreateClient();
+    }
+
+    private static JsonSerializerOptions GetJsonSerializerOptions()
+    {
+        var options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            AllowTrailingCommas = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
+        
+        // Add the same custom enum converters as the main application
+        options.Converters.Add(new StringEnumConverter<RoastLevel>());
+        options.Converters.Add(new StringEnumConverter<BrewMethod>());
+        options.Converters.Add(new StringEnumConverter<EquipmentType>());
+        
+        return options;
     }
 
     [Fact]
@@ -84,10 +95,7 @@ public class EnumSerializationIntegrationTests : IClassFixture<TestWebApplicatio
         getResponse.EnsureSuccessStatusCode();
 
         var responseContent = await getResponse.Content.ReadAsStringAsync();
-        var coffeeBeans = JsonSerializer.Deserialize<List<CoffeeBeanResponseDto>>(responseContent, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var coffeeBeans = JsonSerializer.Deserialize<List<CoffeeBeanResponseDto>>(responseContent, GetJsonSerializerOptions());
 
         // Assert
         coffeeBeans.Should().NotBeEmpty();
@@ -121,10 +129,7 @@ public class EnumSerializationIntegrationTests : IClassFixture<TestWebApplicatio
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var responseContent = await response.Content.ReadAsStringAsync();
-        var createdBean = JsonSerializer.Deserialize<CoffeeBeanResponseDto>(responseContent, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var createdBean = JsonSerializer.Deserialize<CoffeeBeanResponseDto>(responseContent, GetJsonSerializerOptions());
 
         createdBean.Should().NotBeNull();
         createdBean!.RoastLevel.Should().Be(RoastLevel.Dark);
@@ -155,10 +160,7 @@ public class EnumSerializationIntegrationTests : IClassFixture<TestWebApplicatio
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var responseContent = await response.Content.ReadAsStringAsync();
-        var createdBean = JsonSerializer.Deserialize<CoffeeBeanResponseDto>(responseContent, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var createdBean = JsonSerializer.Deserialize<CoffeeBeanResponseDto>(responseContent, GetJsonSerializerOptions());
 
         createdBean.Should().NotBeNull();
         createdBean!.RoastLevel.Should().Be(RoastLevel.MediumLight); // 1 = MediumLight
@@ -189,10 +191,7 @@ public class EnumSerializationIntegrationTests : IClassFixture<TestWebApplicatio
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var responseContent = await response.Content.ReadAsStringAsync();
-        var createdBean = JsonSerializer.Deserialize<CoffeeBeanResponseDto>(responseContent, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var createdBean = JsonSerializer.Deserialize<CoffeeBeanResponseDto>(responseContent, GetJsonSerializerOptions());
 
         createdBean.Should().NotBeNull();
         createdBean!.RoastLevel.Should().Be(RoastLevel.Medium);
@@ -269,10 +268,7 @@ public class EnumSerializationIntegrationTests : IClassFixture<TestWebApplicatio
         var coffeeBeanResponse = await _client.PostAsJsonAsync("/api/coffeebeans", coffeeBeanDto);
         coffeeBeanResponse.EnsureSuccessStatusCode();
         var coffeeBeanContent = await coffeeBeanResponse.Content.ReadAsStringAsync();
-        var createdCoffeeBean = JsonSerializer.Deserialize<CoffeeBeanResponseDto>(coffeeBeanContent, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var createdCoffeeBean = JsonSerializer.Deserialize<CoffeeBeanResponseDto>(coffeeBeanContent, GetJsonSerializerOptions());
 
         // First create a grind setting
         var grindSettingDto = new CreateGrindSettingDto
@@ -286,10 +282,7 @@ public class EnumSerializationIntegrationTests : IClassFixture<TestWebApplicatio
 
         var grindSettingResponse = await _client.PostAsJsonAsync("/api/grindsettings", grindSettingDto);
         var grindSettingContent = await grindSettingResponse.Content.ReadAsStringAsync();
-        var createdGrindSetting = JsonSerializer.Deserialize<GrindSettingResponseDto>(grindSettingContent, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var createdGrindSetting = JsonSerializer.Deserialize<GrindSettingResponseDto>(grindSettingContent, GetJsonSerializerOptions());
 
         // Create brew session with string enum value
         var jsonContent = $@"{{
@@ -311,10 +304,7 @@ public class EnumSerializationIntegrationTests : IClassFixture<TestWebApplicatio
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var responseContent = await response.Content.ReadAsStringAsync();
-        var createdSession = JsonSerializer.Deserialize<BrewSessionResponseDto>(responseContent, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var createdSession = JsonSerializer.Deserialize<BrewSessionResponseDto>(responseContent, GetJsonSerializerOptions());
 
         createdSession.Should().NotBeNull();
         createdSession!.Method.Should().Be(BrewMethod.PourOver);
@@ -343,16 +333,13 @@ public class EnumSerializationIntegrationTests : IClassFixture<TestWebApplicatio
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PostAsync("/api/brewingequipment", content);
+        var response = await _client.PostAsync("/api/equipment", content);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var responseContent = await response.Content.ReadAsStringAsync();
-        var createdEquipment = JsonSerializer.Deserialize<BrewingEquipmentResponseDto>(responseContent, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var createdEquipment = JsonSerializer.Deserialize<BrewingEquipmentResponseDto>(responseContent, GetJsonSerializerOptions());
 
         createdEquipment.Should().NotBeNull();
         createdEquipment!.Type.Should().Be(EquipmentType.Grinder);
@@ -391,10 +378,7 @@ public class EnumSerializationIntegrationTests : IClassFixture<TestWebApplicatio
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var responseContent = await response.Content.ReadAsStringAsync();
-        var coffeeBeans = JsonSerializer.Deserialize<List<CoffeeBeanResponseDto>>(responseContent, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var coffeeBeans = JsonSerializer.Deserialize<List<CoffeeBeanResponseDto>>(responseContent, GetJsonSerializerOptions());
 
         coffeeBeans.Should().NotBeEmpty();
         coffeeBeans!.Should().OnlyContain(b => b.RoastLevel == RoastLevel.Light);
@@ -418,10 +402,7 @@ public class EnumSerializationIntegrationTests : IClassFixture<TestWebApplicatio
 
         var coffeeBeanResponse = await _client.PostAsJsonAsync("/api/coffeebeans", coffeeBeanDto);
         var coffeeBeanContent = await coffeeBeanResponse.Content.ReadAsStringAsync();
-        var createdCoffeeBean = JsonSerializer.Deserialize<CoffeeBeanResponseDto>(coffeeBeanContent, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var createdCoffeeBean = JsonSerializer.Deserialize<CoffeeBeanResponseDto>(coffeeBeanContent, GetJsonSerializerOptions());
 
         // First create a grind setting
         var grindSettingDto = new CreateGrindSettingDto
@@ -435,10 +416,7 @@ public class EnumSerializationIntegrationTests : IClassFixture<TestWebApplicatio
 
         var grindSettingResponse = await _client.PostAsJsonAsync("/api/grindsettings", grindSettingDto);
         var grindSettingContent = await grindSettingResponse.Content.ReadAsStringAsync();
-        var createdGrindSetting = JsonSerializer.Deserialize<GrindSettingResponseDto>(grindSettingContent, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var createdGrindSetting = JsonSerializer.Deserialize<GrindSettingResponseDto>(grindSettingContent, GetJsonSerializerOptions());
 
         // Create brew sessions with different methods
         var espressoSession = new CreateBrewSessionDto
@@ -473,10 +451,7 @@ public class EnumSerializationIntegrationTests : IClassFixture<TestWebApplicatio
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var responseContent = await response.Content.ReadAsStringAsync();
-        var brewSessions = JsonSerializer.Deserialize<List<BrewSessionResponseDto>>(responseContent, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var brewSessions = JsonSerializer.Deserialize<List<BrewSessionResponseDto>>(responseContent, GetJsonSerializerOptions());
 
         brewSessions.Should().NotBeEmpty();
         brewSessions!.Should().OnlyContain(s => s.Method == BrewMethod.Espresso);

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using BrewLog.Api.Services;
 using BrewLog.Api.DTOs;
+using BrewLog.Api.Models;
 using BrewLog.Api.Services.Exceptions;
 using BrewLog.Api.Attributes;
 
@@ -38,7 +39,7 @@ public class CoffeeBeansController : ControllerBase
     public async Task<ActionResult<IEnumerable<CoffeeBeanResponseDto>>> GetCoffeeBeans(
         [FromQuery] string? name = null,
         [FromQuery] string? brand = null,
-        [FromQuery] int? roastLevel = null,
+        [FromQuery] RoastLevel? roastLevel = null,
         [FromQuery] string? origin = null,
         [FromQuery] DateTime? createdAfter = null,
         [FromQuery] DateTime? createdBefore = null)
@@ -50,7 +51,7 @@ public class CoffeeBeansController : ControllerBase
         {
             Name = name,
             Brand = brand,
-            RoastLevel = roastLevel.HasValue ? (Models.RoastLevel)roastLevel.Value : null,
+            RoastLevel = roastLevel,
             Origin = origin,
             CreatedAfter = createdAfter,
             CreatedBefore = createdBefore
