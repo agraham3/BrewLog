@@ -78,7 +78,7 @@
   - Write tests for exception handling scenarios
   - _Requirements: 7.1, 7.2_
 
-- [ ] 10. Create CoffeeBeansController with CRUD operations
+- [x] 10. Create CoffeeBeansController with CRUD operations
   - Implement GET /api/coffeebeans with filtering support
   - Implement GET /api/coffeebeans/{id} for single bean retrieval
   - Implement POST /api/coffeebeans for creating new beans
