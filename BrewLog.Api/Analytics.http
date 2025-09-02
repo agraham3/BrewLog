@@ -1,0 +1,13 @@
+### Test Analytics API Endpoints
+
+### Get dashboard statistics
+GET {{BrewLog.Api_HostAddress}}/api/analytics/dashboard
+
+### Get correlation analysis
+GET {{BrewLog.Api_HostAddress}}/api/analytics/correlations
+
+### Get personalized recommendations
+GET {{BrewLog.Api_HostAddress}}/api/analytics/recommendations
+
+### Get equipment performance analysis
+GET {{BrewLog.Api_HostAddress}}/api/analytics/equipment-performance

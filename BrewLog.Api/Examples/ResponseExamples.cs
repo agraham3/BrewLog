@@ -153,6 +153,138 @@ public static class ResponseExamples
         Version = "1.0.0"
     };
 
+    // Analytics Examples
+    public static readonly DashboardStatsDto DashboardStatsExample = new()
+    {
+        TotalBrewSessions = 45,
+        TotalCoffeeBeans = 8,
+        TotalGrindSettings = 12,
+        TotalEquipment = 4,
+        FavoriteBrews = 15,
+        AverageRating = 7.8,
+        BrewMethodStats = new List<BrewMethodStatsDto>
+        {
+            new() { Method = BrewMethod.PourOver, Count = 18, AverageRating = 8.2, FavoriteCount = 8 },
+            new() { Method = BrewMethod.Espresso, Count = 15, AverageRating = 7.9, FavoriteCount = 5 },
+            new() { Method = BrewMethod.FrenchPress, Count = 8, AverageRating = 7.1, FavoriteCount = 2 },
+            new() { Method = BrewMethod.AeroPress, Count = 4, AverageRating = 8.5, FavoriteCount = 0 }
+        },
+        EquipmentStats = new List<EquipmentStatsDto>
+        {
+            new() { EquipmentId = 1, EquipmentName = "Hario V60-02", Type = EquipmentType.PourOverSetup, UsageCount = 18, AverageRating = 8.2, FavoriteCount = 8 },
+            new() { EquipmentId = 2, EquipmentName = "Breville Barista Express", Type = EquipmentType.EspressoMachine, UsageCount = 15, AverageRating = 7.9, FavoriteCount = 5 }
+        },
+        RecentBrews = new List<RecentBrewSessionDto>
+        {
+            new() { Id = 45, Method = BrewMethod.PourOver, CoffeeBeanName = "Blue Bottle Ethiopian Yirgacheffe", Rating = 9, IsFavorite = true, CreatedDate = DateTime.UtcNow.AddHours(-2) },
+            new() { Id = 44, Method = BrewMethod.Espresso, CoffeeBeanName = "Stumptown Colombian Supremo", Rating = 8, IsFavorite = false, CreatedDate = DateTime.UtcNow.AddHours(-6) }
+        }
+    };
+
+    public static readonly CorrelationAnalysisDto CorrelationAnalysisExample = new()
+    {
+        GrindSizeCorrelations = new List<GrindSizeRatingCorrelationDto>
+        {
+            new() { GrindSize = 12, AverageRating = 7.2, SampleCount = 3 },
+            new() { GrindSize = 15, AverageRating = 8.4, SampleCount = 8 },
+            new() { GrindSize = 18, AverageRating = 7.8, SampleCount = 5 },
+            new() { GrindSize = 22, AverageRating = 7.1, SampleCount = 4 }
+        },
+        TemperatureCorrelations = new List<TemperatureRatingCorrelationDto>
+        {
+            new() { TemperatureRange = 85.0m, AverageRating = 7.0, SampleCount = 2 },
+            new() { TemperatureRange = 90.0m, AverageRating = 8.1, SampleCount = 12 },
+            new() { TemperatureRange = 95.0m, AverageRating = 7.9, SampleCount = 8 }
+        },
+        BrewTimeCorrelations = new List<BrewTimeRatingCorrelationDto>
+        {
+            new() { BrewTimeRange = TimeSpan.FromMinutes(3), AverageRating = 7.5, SampleCount = 4 },
+            new() { BrewTimeRange = TimeSpan.FromMinutes(4), AverageRating = 8.3, SampleCount = 10 },
+            new() { BrewTimeRange = TimeSpan.FromMinutes(5), AverageRating = 7.8, SampleCount = 6 }
+        },
+        OverallCorrelationStrength = 0.65
+    };
+
+    public static readonly List<RecommendationDto> RecommendationsExample = new()
+    {
+        new()
+        {
+            Type = "BestBean",
+            Title = "Try Your Best Performing Bean",
+            Description = "Blue Bottle Ethiopian Yirgacheffe has your highest average rating of 8.7",
+            ConfidenceScore = 85.2,
+            Parameters = new Dictionary<string, object>
+            {
+                ["BeanId"] = 1,
+                ["BeanName"] = "Blue Bottle Ethiopian Yirgacheffe",
+                ["AverageRating"] = 8.7
+            }
+        },
+        new()
+        {
+            Type = "OptimalGrindSize",
+            Title = "Optimal Grind Size Found",
+            Description = "Grind size 15 produces your best results with an average rating of 8.4",
+            ConfidenceScore = 78.9,
+            Parameters = new Dictionary<string, object>
+            {
+                ["GrindSize"] = 15,
+                ["AverageRating"] = 8.4
+            }
+        }
+    };
+
+    public static readonly EquipmentPerformanceDto EquipmentPerformanceExample = new()
+    {
+        EquipmentPerformance = new List<EquipmentPerformanceItemDto>
+        {
+            new()
+            {
+                EquipmentId = 1,
+                Vendor = "Hario",
+                Model = "V60-02",
+                Type = EquipmentType.PourOverSetup,
+                TotalUses = 18,
+                AverageRating = 8.2,
+                FavoriteCount = 8,
+                PerformanceScore = 87.5
+            },
+            new()
+            {
+                EquipmentId = 2,
+                Vendor = "Breville",
+                Model = "Barista Express",
+                Type = EquipmentType.EspressoMachine,
+                TotalUses = 15,
+                AverageRating = 7.9,
+                FavoriteCount = 5,
+                PerformanceScore = 82.3
+            }
+        },
+        BestPerformingEquipment = new()
+        {
+            EquipmentId = 1,
+            Vendor = "Hario",
+            Model = "V60-02",
+            Type = EquipmentType.PourOverSetup,
+            TotalUses = 18,
+            AverageRating = 8.2,
+            FavoriteCount = 8,
+            PerformanceScore = 87.5
+        },
+        MostUsedEquipment = new()
+        {
+            EquipmentId = 1,
+            Vendor = "Hario",
+            Model = "V60-02",
+            Type = EquipmentType.PourOverSetup,
+            TotalUses = 18,
+            AverageRating = 8.2,
+            FavoriteCount = 8,
+            PerformanceScore = 87.5
+        }
+    };
+
     // Error Examples
     public static readonly object ValidationErrorExample = new
     {
@@ -275,6 +407,23 @@ public class ResponseExamplesSchemaFilter : ISchemaFilter
         else if (context.Type == typeof(HealthResponseDto))
         {
             schema.Example = CreateOpenApiObject(ResponseExamples.HealthExample);
+        }
+        else if (context.Type == typeof(DashboardStatsDto))
+        {
+            schema.Example = CreateOpenApiObject(ResponseExamples.DashboardStatsExample);
+        }
+        else if (context.Type == typeof(CorrelationAnalysisDto))
+        {
+            schema.Example = CreateOpenApiObject(ResponseExamples.CorrelationAnalysisExample);
+        }
+        else if (context.Type == typeof(IEnumerable<RecommendationDto>) || 
+                 context.Type == typeof(List<RecommendationDto>))
+        {
+            schema.Example = CreateOpenApiObject(ResponseExamples.RecommendationsExample);
+        }
+        else if (context.Type == typeof(EquipmentPerformanceDto))
+        {
+            schema.Example = CreateOpenApiObject(ResponseExamples.EquipmentPerformanceExample);
         }
         else if (context.Type == typeof(IEnumerable<string>) || context.Type == typeof(List<string>))
         {
