@@ -5,6 +5,7 @@ using BrewLog.Api.Services;
 using BrewLog.Api.Middleware;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,8 +46,30 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "BrewLog API",
         Version = "v1",
-        Description = "A comprehensive coffee brewing tracking API"
+        Description = "A comprehensive coffee brewing tracking API for managing coffee beans, brewing equipment, grind settings, and brew sessions",
+        Contact = new()
+        {
+            Name = "BrewLog API Support",
+            Email = "support@brewlog.com"
+        },
+        License = new()
+        {
+            Name = "MIT License",
+            Url = new Uri("https://opensource.org/licenses/MIT")
+        }
     });
+
+    // Include XML documentation comments
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+    {
+        c.IncludeXmlComments(xmlPath);
+    }
+
+    // Configure enum serialization to show string values
+    c.UseAllOfToExtendReferenceSchemas();
+    c.SupportNonNullableReferenceTypes();
 });
 
 // Add CORS for frontend development
