@@ -1,0 +1,46 @@
+### Test GrindSettings API Endpoints
+
+### Get all grind settings
+GET {{BrewLog.Api_HostAddress}}/api/grindsettings
+
+### Get all grind settings with filters
+GET {{BrewLog.Api_HostAddress}}/api/grindsettings?minGrindSize=10&maxGrindSize=20&grinderType=Burr
+
+### Get grind setting by ID
+GET {{BrewLog.Api_HostAddress}}/api/grindsettings/1
+
+### Create new grind setting
+POST {{BrewLog.Api_HostAddress}}/api/grindsettings
+Content-Type: application/json
+
+{
+  "grindSize": 15,
+  "grindTime": "00:00:30",
+  "grindWeight": 20.5,
+  "grinderType": "Burr",
+  "notes": "Medium grind for pour over"
+}
+
+### Update grind setting
+PUT {{BrewLog.Api_HostAddress}}/api/grindsettings/1
+Content-Type: application/json
+
+{
+  "grindSize": 18,
+  "grindTime": "00:00:35",
+  "grindWeight": 22.0,
+  "grinderType": "Burr",
+  "notes": "Updated medium-coarse grind"
+}
+
+### Delete grind setting
+DELETE {{BrewLog.Api_HostAddress}}/api/grindsettings/1
+
+### Get recent grind settings
+GET {{BrewLog.Api_HostAddress}}/api/grindsettings/recent?count=5
+
+### Get most used grind settings
+GET {{BrewLog.Api_HostAddress}}/api/grindsettings/most-used?count=5
+
+### Get distinct grinder types
+GET {{BrewLog.Api_HostAddress}}/api/grindsettings/grinder-types

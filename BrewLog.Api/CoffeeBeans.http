@@ -1,0 +1,59 @@
+### Test CoffeeBeans API Endpoints
+
+### Get all coffee beans
+GET {{BrewLog.Api_HostAddress}}/api/coffeebeans
+
+### Get all coffee beans with filters
+GET {{BrewLog.Api_HostAddress}}/api/coffeebeans?name=Ethiopian&brand=Counter&roastLevel=1&origin=Ethiopia
+
+### Get coffee bean by ID
+GET {{BrewLog.Api_HostAddress}}/api/coffeebeans/1
+
+### Create new coffee bean
+POST {{BrewLog.Api_HostAddress}}/api/coffeebeans
+Content-Type: application/json
+
+{
+  "name": "Ethiopian Yirgacheffe",
+  "brand": "Counter Culture",
+  "roastLevel": 1,
+  "origin": "Ethiopia",
+  "notes": "Bright and floral with citrus notes",
+  "roastDate": "2024-01-15T00:00:00Z",
+  "purchasePrice": 18.50
+}
+
+### Update coffee bean
+PUT {{BrewLog.Api_HostAddress}}/api/coffeebeans/1
+Content-Type: application/json
+
+{
+  "name": "Ethiopian Yirgacheffe Premium",
+  "brand": "Counter Culture",
+  "roastLevel": 1,
+  "origin": "Ethiopia",
+  "notes": "Updated: Bright and floral with citrus and bergamot notes",
+  "roastDate": "2024-01-15T00:00:00Z",
+  "purchasePrice": 19.50
+}
+
+### Delete coffee bean
+DELETE {{BrewLog.Api_HostAddress}}/api/coffeebeans/1
+
+### Get recent coffee beans
+GET {{BrewLog.Api_HostAddress}}/api/coffeebeans/recent?count=5
+
+### Get most used coffee beans
+GET {{BrewLog.Api_HostAddress}}/api/coffeebeans/most-used?count=5
+
+### Get coffee beans with date filters
+GET {{BrewLog.Api_HostAddress}}/api/coffeebeans?createdAfter=2024-01-01T00:00:00Z&createdBefore=2024-12-31T23:59:59Z
+
+### Get coffee beans by roast level (Light=1, Medium=2, Dark=3)
+GET {{BrewLog.Api_HostAddress}}/api/coffeebeans?roastLevel=2
+
+### Search coffee beans by partial name
+GET {{BrewLog.Api_HostAddress}}/api/coffeebeans?name=Ethiopian
+
+### Search coffee beans by brand
+GET {{BrewLog.Api_HostAddress}}/api/coffeebeans?brand=Counter
