@@ -1,31 +1,29 @@
 using System.Net;
 using System.Text.Json;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 using FluentValidation;
 using FluentValidation.Results;
 using BrewLog.Api.Middleware;
 using BrewLog.Api.Services.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace BrewLog.Api.Tests.Middleware;
 
 public class GlobalExceptionMiddlewareTests
 {
     private readonly Mock<ILogger<GlobalExceptionMiddleware>> _mockLogger;
-    private readonly GlobalExceptionMiddleware _middleware;
     private readonly DefaultHttpContext _context;
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
 
     public GlobalExceptionMiddlewareTests()
     {
         _mockLogger = new Mock<ILogger<GlobalExceptionMiddleware>>();
         _context = new DefaultHttpContext();
         _context.Response.Body = new MemoryStream();
-
-        _middleware = new GlobalExceptionMiddleware(
-            next: (innerHttpContext) => throw new Exception("Test exception"),
-            logger: _mockLogger.Object);
     }
 
     [Fact]
@@ -52,10 +50,7 @@ public class GlobalExceptionMiddlewareTests
 
         _context.Response.Body.Seek(0, SeekOrigin.Begin);
         var responseBody = await new StreamReader(_context.Response.Body).ReadToEndAsync();
-        var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(responseBody, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(responseBody, JsonOptions);
 
         Assert.NotNull(errorResponse);
         Assert.Equal("VALIDATION_ERROR", errorResponse.Error.Code);
@@ -88,10 +83,7 @@ public class GlobalExceptionMiddlewareTests
 
         _context.Response.Body.Seek(0, SeekOrigin.Begin);
         var responseBody = await new StreamReader(_context.Response.Body).ReadToEndAsync();
-        var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(responseBody, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(responseBody, JsonOptions);
 
         Assert.NotNull(errorResponse);
         Assert.Equal("NOT_FOUND", errorResponse.Error.Code);
@@ -118,10 +110,7 @@ public class GlobalExceptionMiddlewareTests
 
         _context.Response.Body.Seek(0, SeekOrigin.Begin);
         var responseBody = await new StreamReader(_context.Response.Body).ReadToEndAsync();
-        var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(responseBody, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(responseBody, JsonOptions);
 
         Assert.NotNull(errorResponse);
         Assert.Equal("BUSINESS_VALIDATION_ERROR", errorResponse.Error.Code);
@@ -148,10 +137,7 @@ public class GlobalExceptionMiddlewareTests
 
         _context.Response.Body.Seek(0, SeekOrigin.Begin);
         var responseBody = await new StreamReader(_context.Response.Body).ReadToEndAsync();
-        var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(responseBody, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(responseBody, JsonOptions);
 
         Assert.NotNull(errorResponse);
         Assert.Equal("REFERENTIAL_INTEGRITY_ERROR", errorResponse.Error.Code);
@@ -178,10 +164,7 @@ public class GlobalExceptionMiddlewareTests
 
         _context.Response.Body.Seek(0, SeekOrigin.Begin);
         var responseBody = await new StreamReader(_context.Response.Body).ReadToEndAsync();
-        var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(responseBody, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(responseBody, JsonOptions);
 
         Assert.NotNull(errorResponse);
         Assert.Equal("INTERNAL_SERVER_ERROR", errorResponse.Error.Code);
@@ -237,7 +220,7 @@ public class GlobalExceptionMiddlewareTests
     public async Task InvokeAsync_WithEmptyValidationException_ReturnsValidationErrorWithEmptyDetails()
     {
         // Arrange
-        var validationException = new ValidationException(new List<ValidationFailure>());
+        var validationException = new ValidationException([]);
 
         var middleware = new GlobalExceptionMiddleware(
             next: (innerHttpContext) => throw validationException,
@@ -251,10 +234,7 @@ public class GlobalExceptionMiddlewareTests
 
         _context.Response.Body.Seek(0, SeekOrigin.Begin);
         var responseBody = await new StreamReader(_context.Response.Body).ReadToEndAsync();
-        var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(responseBody, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(responseBody, JsonOptions);
 
         Assert.NotNull(errorResponse);
         Assert.Equal("VALIDATION_ERROR", errorResponse.Error.Code);
