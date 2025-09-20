@@ -1,32 +1,26 @@
 import { apiClient } from './api';
 import type { 
-  CoffeeBean, 
+  CoffeeBeanResponseDto, 
   CreateCoffeeBeanDto, 
   UpdateCoffeeBeanDto,
-  CoffeeBeanFilter 
+  CoffeeBeanFilterDto 
 } from '@/types';
 
 export const coffeeBeanService = {
-  getAll: (filter?: CoffeeBeanFilter): Promise<CoffeeBean[]> => {
-    const params = new URLSearchParams();
-    if (filter?.search) params.append('search', filter.search);
-    if (filter?.roastLevel) params.append('roastLevel', filter.roastLevel);
-    if (filter?.brand) params.append('brand', filter.brand);
-    
-    const queryString = params.toString();
-    return apiClient.get<CoffeeBean[]>(`/coffeebeans${queryString ? `?${queryString}` : ''}`);
+  getAll: (filter?: CoffeeBeanFilterDto): Promise<CoffeeBeanResponseDto[]> => {
+    return apiClient.get<CoffeeBeanResponseDto[]>('/coffeebeans', filter);
   },
 
-  getById: (id: number): Promise<CoffeeBean> => {
-    return apiClient.get<CoffeeBean>(`/coffeebeans/${id}`);
+  getById: (id: number): Promise<CoffeeBeanResponseDto> => {
+    return apiClient.get<CoffeeBeanResponseDto>(`/coffeebeans/${id}`);
   },
 
-  create: (data: CreateCoffeeBeanDto): Promise<CoffeeBean> => {
-    return apiClient.post<CoffeeBean>('/coffeebeans', data);
+  create: (data: CreateCoffeeBeanDto): Promise<CoffeeBeanResponseDto> => {
+    return apiClient.post<CoffeeBeanResponseDto>('/coffeebeans', data);
   },
 
-  update: (id: number, data: UpdateCoffeeBeanDto): Promise<CoffeeBean> => {
-    return apiClient.put<CoffeeBean>(`/coffeebeans/${id}`, data);
+  update: (id: number, data: UpdateCoffeeBeanDto): Promise<CoffeeBeanResponseDto> => {
+    return apiClient.put<CoffeeBeanResponseDto>(`/coffeebeans/${id}`, data);
   },
 
   delete: (id: number): Promise<void> => {

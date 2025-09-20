@@ -136,7 +136,7 @@
   - Set up Tailwind CSS for styling
   - _Requirements: 5.1, 6.1_
 
-- [ ] 16. Create TypeScript types and API service layer
+- [x] 16. Create TypeScript types and API service layer
   - Create TypeScript interfaces matching backend DTOs
   - Implement HTTP client service with error handling
   - Create API service methods for all entity operations
